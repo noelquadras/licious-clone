@@ -1,26 +1,76 @@
 // server.js
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
+
+
+import express from "express";
+import dotenv from "dotenv";
+import connectDB from "./config/db.js";
+import userRoutes from "./routes/userRoutes.js";
+
+
+
+
+
+
+
+import adminRoutes from "./routes/adminRoutes.js";
+import vendorRoutes from "./routes/vendorRoutes.js";
+import deliveryRoutes from "./routes/deliveryRoutes.js";
+import productRoutes from "./routes/productRoutes.js";
+import cartRoutes from "./routes/cartRoutes.js";
+
+
+
+
+
+
+
+dotenv.config();
 
 const app = express();
 
-// Middleware
-app.use(cors());
-app.use(express.json()); // parse JSON bodies
+// middleware
+app.use(express.json());
 
-// Simple health-check route
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', time: new Date().toISOString() });
+// connect to db
+connectDB();
+
+// sample route
+app.get("/", (req, res) => {
+    res.send("API is running...");
 });
 
-// Basic error handler (catch-all)
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(err.status || 500).json({ error: err.message || 'Server error' });
-});
-
+// server
 const PORT = process.env.PORT || 5000;
+
+
+
+
+
+app.use("/api/users", userRoutes);
+
+
+
+
+
+
+app.use("/api/admin", adminRoutes);
+app.use("/api/vendor", vendorRoutes);
+app.use("/api/delivery", deliveryRoutes);
+
+
+app.use("/api/vendors", vendorRoutes);
+
+    
+app.use("/api/products", productRoutes);
+
+app.use("/api/cart", cartRoutes);
+
+
+
+
+
+
 app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
+    console.log(`Server listening on port ${PORT}`);
 });
+
