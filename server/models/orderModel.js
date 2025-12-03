@@ -7,6 +7,7 @@ const orderSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+
     products: [
       {
         product: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
@@ -14,18 +15,31 @@ const orderSchema = new mongoose.Schema(
         vendor: { type: mongoose.Schema.Types.ObjectId, ref: "Vendor" },
       },
     ],
+
     totalPrice: { type: Number, required: true },
+
+    // FINAL ENUM (Merged & Standardized)
     status: {
       type: String,
-      enum: ["pending", "confirmed", "out-for-delivery", "delivered", "cancelled"],
+      enum: [
+        "pending",
+        "confirmed",
+        "out-for-delivery",
+        "delivered",
+        "cancelled",
+      ],
       default: "pending",
     },
+
+    // UPDATED DELIVERY PARTNER FIELD
     deliveryBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User", // delivery partner
+      ref: "DeliveryPartner", // UPDATED (was "User")
+      default: null,
     },
   },
   { timestamps: true }
 );
 
 export default mongoose.model("Order", orderSchema);
+
