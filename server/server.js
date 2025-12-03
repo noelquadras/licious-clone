@@ -56,7 +56,7 @@ app.use("/api/users", userRoutes);
 
 app.use("/api/admin", adminRoutes);
 app.use("/api/vendor", vendorRoutes);
-app.use("/api/delivery", deliveryRoutes);
+app.use("/api/deliver", deliveryRoutes);
 
 
 app.use("/api/vendors", vendorRoutes);

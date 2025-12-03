@@ -9,26 +9,34 @@ const deliveryPartnerSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      required: [true, "Email is required"],
       unique: true,
+      sparse: true, // Allows multiple null values
     },
     password: {
       type: String,
-      required: [true, "Password is required"],
     },
     phone: {
       type: String,
     },
+    vehicleType: {
+      type: String,
+    },
     vehicleNumber: {
       type: String,
-    }
+    },
+    assignedOrders: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Order",
+      },
+    ],
   },
   { timestamps: true }
 );
 
-// Hash password before saving
+// Hash password before saving (only if password is provided)
 deliveryPartnerSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
+  if (!this.isModified("password") || !this.password) return next();
 
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
