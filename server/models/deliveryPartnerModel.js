@@ -12,6 +12,12 @@ const deliveryPartnerSchema = new mongoose.Schema(
     vehicleType: {
       type: String,
     },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      unique: true,
+      sparse: true, // Allows multiple null values
+    },
     assignedOrders: [
       {
         type: mongoose.Schema.Types.ObjectId,

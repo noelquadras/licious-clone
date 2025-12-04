@@ -122,10 +122,11 @@ import Order from "../models/orderModel.js";
 
 /**
  * Register Delivery Partner (Admin-only)
+ * Optionally accepts userId to link to a User account
  */
 export const registerDeliveryPartner = async (req, res) => {
   try {
-    const { name, phone, vehicleType } = req.body;
+    const { name, phone, vehicleType, userId } = req.body;
 
     if (!name || !phone || !vehicleType) {
       return res.status(400).json({ message: "All fields are required" });
@@ -134,10 +135,19 @@ export const registerDeliveryPartner = async (req, res) => {
     const exists = await DeliveryPartner.findOne({ phone });
     if (exists) return res.status(400).json({ message: "Partner already exists" });
 
+    // If userId is provided, check if it's already linked to another partner
+    if (userId) {
+      const existingLink = await DeliveryPartner.findOne({ userId });
+      if (existingLink) {
+        return res.status(400).json({ message: "User is already linked to another delivery partner" });
+      }
+    }
+
     const deliveryPartner = await DeliveryPartner.create({
       name,
       phone,
       vehicleType,
+      userId: userId || null,
       assignedOrders: [],
     });
 
@@ -191,10 +201,15 @@ export const assignDeliveryPartner = async (req, res) => {
 
 /**
  * Delivery Partner Updates Order Status
+ * Can be called by admin (with auth token) or by providing deliveryPartnerId in body
  */
 export const updateDeliveryStatus = async (req, res) => {
   try {
-    const { orderId, status } = req.body;
+    const { orderId, status, deliveryPartnerId } = req.body;
+
+    if (!orderId || !status) {
+      return res.status(400).json({ message: "orderId and status are required" });
+    }
 
     const validStatuses = ["out-for-delivery", "delivered", "cancelled"];
     if (!validStatuses.includes(status)) {
@@ -204,10 +219,23 @@ export const updateDeliveryStatus = async (req, res) => {
     const order = await Order.findById(orderId);
     if (!order) return res.status(404).json({ message: "Order not found" });
 
-    // Must belong to the logged-in delivery partner
-    if (order.deliveryBy.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ message: "Not authorized for this order" });
-    }
+    // Check if user is admin (optional auth)
+    const isAdmin = req.user && req.user.role === "admin";
+
+    // If not admin, verify deliveryPartnerId matches the order's deliveryBy
+    if (!isAdmin) {
+      if (!deliveryPartnerId) {
+        return res.status(400).json({ message: "deliveryPartnerId is required when not authenticated as admin" });
+      }
+
+      if (!order.deliveryBy) {
+        return res.status(403).json({ message: "No delivery partner assigned to this order" });
+      }
+
+      if (order.deliveryBy.toString() !== deliveryPartnerId.toString()) {
+        return res.status(403).json({ message: "Not authorized for this order" });
+      }
+        }
 
     // Update status
     order.status = status;
@@ -221,13 +249,59 @@ export const updateDeliveryStatus = async (req, res) => {
 
 
 /**
+ * Link User account to DeliveryPartner
+ */
+export const linkUserToPartner = async (req, res) => {
+  try {
+    const { partnerId } = req.body;
+
+    if (!partnerId) {
+      return res.status(400).json({ message: "partnerId is required" });
+    }
+
+    const deliveryPartner = await DeliveryPartner.findById(partnerId);
+    if (!deliveryPartner) {
+      return res.status(404).json({ message: "Delivery partner not found" });
+    }
+
+    // Check if userId is already set
+    if (deliveryPartner.userId) {
+      return res.status(400).json({ message: "Delivery partner is already linked to a user" });
+    }
+
+    // Check if this user is already linked to another partner
+    const existingLink = await DeliveryPartner.findOne({ userId: req.user._id });
+    if (existingLink) {
+      return res.status(400).json({ message: "User is already linked to another delivery partner" });
+    }
+
+    // Link the user
+    deliveryPartner.userId = req.user._id;
+    await deliveryPartner.save();
+
+    res.json({
+      message: "User linked to delivery partner successfully",
+      deliveryPartner,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+/**
  * View all orders assigned to a delivery partner
  */
 export const getAssignedOrders = async (req, res) => {
   try {
-    const partnerId = req.user._id;
+    // Find the DeliveryPartner linked to this User
+    const deliveryPartner = await DeliveryPartner.findOne({ userId: req.user._id });
+    
+    if (!deliveryPartner) {
+      return res.status(404).json({ message: "Delivery partner profile not found for this user. Please link your account to a delivery partner." });
+    }
 
-    const orders = await Order.find({ deliveryBy: partnerId })
+    // Query orders assigned to this DeliveryPartner
+    const orders = await Order.find({ deliveryBy: deliveryPartner._id })
       .populate("user", "name email")
       .populate("products.product", "name price image")
       .populate("products.vendor", "name");

@@ -3,10 +3,11 @@ import {
   registerDeliveryPartner,
   assignDeliveryPartner,
   updateDeliveryStatus,
-  getAssignedOrders
+  getAssignedOrders,
+  linkUserToPartner
 } from "../controllers/deliveryPartnerController.js";
 
-import { protect, authorizeRoles } from "../middlewares/authMiddleware.js";
+import { protect, authorizeRoles, optionalProtect } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
@@ -32,13 +33,22 @@ router.post(
 
 /**
  * Delivery partner updates delivery status
- * (Requires login as delivery partner)
+ * Can be called by admin (with auth) or with deliveryPartnerId in body
  */
 router.put(
   "/update-status",
+  optionalProtect,
+  updateDeliveryStatus
+);
+
+/**
+ * Link User account to DeliveryPartner (for delivery users)
+ */
+router.post(
+  "/link-user",
   protect,
   authorizeRoles("delivery"),
-  updateDeliveryStatus
+  linkUserToPartner
 );
 
 /**

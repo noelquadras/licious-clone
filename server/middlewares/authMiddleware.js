@@ -136,3 +136,27 @@ export const isDelivery = (req, res, next) => {
     res.status(500).send({ message: "Auth error" });
   }
 };
+
+// Optional protect - sets req.user if token is provided, but doesn't fail if no token
+export const optionalProtect = async (req, res, next) => {
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    try {
+      const token = req.headers.authorization.split(" ")[1];
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      req.user = await User.findById(decoded.id).select("-password");
+      
+      if (!req.user) {
+        // User doesn't exist, but we'll continue without setting req.user
+        req.user = null;
+      }
+    } catch (error) {
+      // Invalid token, but we'll continue without setting req.user
+      req.user = null;
+    }
+  }
+  
+  next();
+};
