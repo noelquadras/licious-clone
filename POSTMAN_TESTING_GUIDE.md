@@ -477,7 +477,7 @@ or
 | `/api/vendors/status/:id`  | PUT    | Yes           | admin |
 | `/api/delivery/status/:id` | PUT    | Yes           | admin |
 
----
+--
 
 **Happy Testing! 🚀**
 
