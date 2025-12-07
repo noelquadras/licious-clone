@@ -72,7 +72,7 @@ app.use("/api/orders", orderRoutes);
 
 app.use("/api/delivery", deliveryPartnerRoutes);
 
-// app.use("/api/payments", paymentRoutes);
+app.use("/api/payments", paymentRoutes);
 
 
 
