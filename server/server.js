@@ -37,12 +37,12 @@ app.use(express.json());
 // connect to db
 connectDB();
 
-// sample route
+
 app.get("/", (req, res) => {
     res.send("API is running...");
 });
 
-// server
+
 const PORT = process.env.PORT || 5000;
 
 
