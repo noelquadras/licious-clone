@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 
 const vendorSchema = new mongoose.Schema(
   {
@@ -19,6 +20,10 @@ const vendorSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
     },
+    password: {
+      type: String,
+      required: true,
+    },
     phone: {
       type: String,
       required: true,
@@ -33,24 +38,39 @@ const vendorSchema = new mongoose.Schema(
       enum: ["pending", "approved", "rejected"],
       default: "pending",
     },
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      unique: true,
-      sparse: true, // Allows multiple null values
+    location: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point",
+      },
+      coordinates: {
+        type: [Number], // [longitude, latitude]
+        default: [0, 0],
+      },
+    },
+    address: {
+      type: String,
     },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User", // Admin who created/approved the vendor (optional)
+      ref: "Admin", // Admin who approved the vendor (optional)
     },
-    products: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Product", // Will link later in Phase 4
-      },
-    ],
   },
   { timestamps: true }
 );
+
+// Hash password before saving
+vendorSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
+    return next();
+  }
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+  next();
+});
+
+// Create geospatial index for location-based queries
+vendorSchema.index({ location: "2dsphere" });
 
 export default mongoose.model("Vendor", vendorSchema);

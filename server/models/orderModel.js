@@ -10,11 +10,27 @@ const orderSchema = new mongoose.Schema(
 
     products: [
       {
-        product: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
+        vendorProduct: { type: mongoose.Schema.Types.ObjectId, ref: "VendorProduct" },
         quantity: { type: Number, required: true },
         vendor: { type: mongoose.Schema.Types.ObjectId, ref: "Vendor" },
       },
     ],
+    
+    deliveryAddress: {
+      type: String,
+      required: true,
+    },
+    
+    deliveryLocation: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point",
+      },
+      coordinates: {
+        type: [Number], // [longitude, latitude]
+      },
+    },
 
     totalPrice: { type: Number, required: true },
 
