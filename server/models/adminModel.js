@@ -1,12 +1,7 @@
 import mongoose from "mongoose";
-
-
-
 import bcrypt from "bcryptjs";
 
-
-
-const userSchema = new mongoose.Schema(
+const adminSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -26,43 +21,19 @@ const userSchema = new mongoose.Schema(
     phone: {
       type: String,
     },
-    address: {
-      type: String,
-    },
-    location: {
-      type: {
-        type: String,
-        enum: ["Point"],
-        default: "Point",
-      },
-      coordinates: {
-        type: [Number], // [longitude, latitude]
-        default: [0, 0],
-      },
-    },
   },
   { timestamps: true }
 );
 
-// Create geospatial index for location-based queries
-userSchema.index({ location: "2dsphere" });
-
-
-
-
-
 // Hash password before saving
-userSchema.pre("save", async function (next) {
+adminSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
-    next();
+    return next();
   }
-
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
+  next();
 });
 
+export default mongoose.model("Admin", adminSchema);
 
-
-
-
-export default mongoose.model("User", userSchema);

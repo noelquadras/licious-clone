@@ -1,10 +1,22 @@
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 
 const deliveryPartnerSchema = new mongoose.Schema(
   {
     name: {
       type: String,
       required: [true, "Name is required"],
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+    },
+    password: {
+      type: String,
+      required: true,
     },
     phone: {
       type: String,
@@ -14,16 +26,24 @@ const deliveryPartnerSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    vehicleNumber: {
+      type: String,
+    },
     status: {
       type: String,
       enum: ["pending", "approved", "rejected"],
       default: "pending",
     },
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      unique: true,
-      sparse: true, // Allows multiple null values
+    location: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point",
+      },
+      coordinates: {
+        type: [Number], // [longitude, latitude]
+        default: [0, 0],
+      },
     },
     assignedOrders: [
       {
@@ -34,5 +54,18 @@ const deliveryPartnerSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+// Hash password before saving
+deliveryPartnerSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
+    return next();
+  }
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+  next();
+});
+
+// Create geospatial index for location-based queries
+deliveryPartnerSchema.index({ location: "2dsphere" });
 
 export default mongoose.model("DeliveryPartner", deliveryPartnerSchema);
