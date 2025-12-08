@@ -1,22 +1,19 @@
 import express from "express";
-import { registerUser, getAllUsers } from "../controllers/userController.js";
-import { loginUser } from "../controllers/userController.js";
 import { protect, authorizeRoles } from "../middlewares/authMiddleware.js";
+import { getAllUsers, getCurrentUser, updateUserLocation } from "../controllers/userController.js";
+import { registerUser, loginUser } from "../controllers/authController.js";
 
 const router = express.Router();
 
+// Authentication routes (now in authController)
 router.post("/register", registerUser);
 router.post("/login", loginUser);
-router.get("/", getAllUsers);
 
-// Test protected user route
-router.get("/me", protect, (req, res) => {
-  res.json({ message: "Protected route accessed", user: req.user });
-});
+// User profile routes
+router.get("/me", protect, authorizeRoles("user"), getCurrentUser);
+router.put("/location", protect, authorizeRoles("user"), updateUserLocation);
 
-// Test admin-only route
-router.get("/admin-only", protect, authorizeRoles("admin"), (req, res) => {
-  res.json({ message: "Admin route accessed" });
-});
+// Admin routes
+router.get("/", protect, authorizeRoles("admin"), getAllUsers);
 
 export default router;

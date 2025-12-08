@@ -1,52 +1,81 @@
 import Cart from "../models/cartModel.js";
-import Product from "../models/productModel.js";
+import VendorProduct from "../models/vendorProductModel.js";
 
 // Get user cart
 export const getCart = async (req, res) => {
   try {
-    const cart = await Cart.findOne({ user: req.user._id }).populate(
-      "items.product",
-      "name price image"
-    );
+    const cart = await Cart.findOne({ user: req.user._id })
+      .populate({
+        path: "items.vendorProduct",
+        populate: {
+          path: "baseProduct",
+          select: "name category description images",
+        },
+      })
+      .populate("items.vendorProduct.vendor", "storeName ownerName");
+    
+    if (!cart) {
+      return res.json({ cart: null, message: "Cart is empty" });
+    }
+    
     res.json({ cart });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-// Add product to cart
+// Add vendor product to cart
 export const addToCart = async (req, res) => {
   try {
-    const { productId, quantity } = req.body;
+    const { vendorProductId, quantity } = req.body;
 
-    if (!productId || !quantity)
-      return res.status(400).json({ message: "Product and quantity required" });
+    if (!vendorProductId || !quantity) {
+      return res.status(400).json({ message: "vendorProductId and quantity required" });
+    }
 
-    const product = await Product.findById(productId);
-    if (!product) return res.status(404).json({ message: "Product not found" });
+    const vendorProduct = await VendorProduct.findById(vendorProductId)
+      .populate("baseProduct")
+      .populate("vendor");
+    
+    if (!vendorProduct) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    if (vendorProduct.status !== "active" || vendorProduct.stock < quantity) {
+      return res.status(400).json({ message: "Product not available or insufficient stock" });
+    }
 
     let cart = await Cart.findOne({ user: req.user._id });
 
     if (!cart) {
       cart = await Cart.create({
         user: req.user._id,
-        items: [{ product: productId, quantity }],
+        items: [{ vendorProduct: vendorProductId, quantity }],
       });
     } else {
       const itemIndex = cart.items.findIndex(
-        (item) => item.product.toString() === productId
+        (item) => item.vendorProduct.toString() === vendorProductId
       );
 
       if (itemIndex > -1) {
-        // Update quantity if product already in cart
         cart.items[itemIndex].quantity += quantity;
       } else {
-        cart.items.push({ product: productId, quantity });
+        cart.items.push({ vendorProduct: vendorProductId, quantity });
       }
       await cart.save();
     }
 
-    res.json({ message: "Product added to cart", cart });
+    const populatedCart = await Cart.findById(cart._id)
+      .populate({
+        path: "items.vendorProduct",
+        populate: {
+          path: "baseProduct",
+          select: "name category description images",
+        },
+      })
+      .populate("items.vendorProduct.vendor", "storeName ownerName");
+
+    res.json({ message: "Product added to cart", cart: populatedCart });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -55,17 +84,32 @@ export const addToCart = async (req, res) => {
 // Remove product from cart
 export const removeFromCart = async (req, res) => {
   try {
-    const { productId } = req.body;
+    const { vendorProductId } = req.body;
+
+    if (!vendorProductId) {
+      return res.status(400).json({ message: "vendorProductId is required" });
+    }
 
     const cart = await Cart.findOne({ user: req.user._id });
     if (!cart) return res.status(404).json({ message: "Cart not found" });
 
     cart.items = cart.items.filter(
-      (item) => item.product.toString() !== productId
+      (item) => item.vendorProduct.toString() !== vendorProductId
     );
 
     await cart.save();
-    res.json({ message: "Product removed from cart", cart });
+    
+    const populatedCart = await Cart.findById(cart._id)
+      .populate({
+        path: "items.vendorProduct",
+        populate: {
+          path: "baseProduct",
+          select: "name category description images",
+        },
+      })
+      .populate("items.vendorProduct.vendor", "storeName ownerName");
+
+    res.json({ message: "Product removed from cart", cart: populatedCart });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

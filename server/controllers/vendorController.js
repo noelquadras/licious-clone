@@ -1,50 +1,40 @@
 import Vendor from "../models/vendorModel.js";
-import User from "../models/userModel.js";
 
-// Self-registration for vendors (public endpoint)
-export const registerVendor = async (req, res) => {
+// Admin creates a new vendor (alternative method)
+export const createVendor = async (req, res) => {
   try {
-    const { storeName, ownerName, email, phone, password, documents } = req.body;
+    const { storeName, ownerName, email, phone, password, address, latitude, longitude, documents } = req.body;
 
-    // Check required fields
     if (!storeName || !ownerName || !email || !phone || !password) {
-      return res.status(400).json({ message: "All fields are required" });
+      return res.status(400).json({ message: "All required fields must be provided" });
     }
 
-    // Check if vendor email already exists
     const existingVendor = await Vendor.findOne({ email });
     if (existingVendor) {
-      return res.status(400).json({ message: "Vendor already registered with this email" });
+      return res.status(400).json({ message: "Vendor already exists" });
     }
 
-    // Check if user already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: "User already exists with this email" });
-    }
+    // Set location if provided
+    const location = (latitude && longitude) ? {
+      type: "Point",
+      coordinates: [parseFloat(longitude), parseFloat(latitude)]
+    } : undefined;
 
-    // Create user account with vendor role
-    const user = await User.create({
-      name: ownerName,
-      email,
-      password,
-      role: "vendor",
-      phone,
-    });
-
-    // Create vendor profile with pending status
     const vendor = await Vendor.create({
       storeName,
       ownerName,
       email,
+      password,
       phone,
+      address,
+      location,
       documents,
-      userId: user._id,
-      status: "pending", // Will be approved by admin
+      createdBy: req.user._id,
+      status: "approved", // Admin-created vendors are auto-approved
     });
 
     res.status(201).json({
-      message: "Vendor registration submitted. Waiting for admin approval.",
+      message: "Vendor created successfully",
       vendor: {
         id: vendor._id,
         storeName: vendor.storeName,
@@ -58,46 +48,11 @@ export const registerVendor = async (req, res) => {
   }
 };
 
-// Admin creates a new vendor (alternative method)
-export const createVendor = async (req, res) => {
-  try {
-    const { storeName, ownerName, email, phone, documents } = req.body;
-
-    // Check required fields
-    if (!storeName || !ownerName || !email || !phone) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
-
-    // Check if vendor email already exists
-    const existingVendor = await Vendor.findOne({ email });
-    if (existingVendor) {
-      return res.status(400).json({ message: "Vendor already exists" });
-    }
-
-    const vendor = await Vendor.create({
-      storeName,
-      ownerName,
-      email,
-      phone,
-      documents,
-      createdBy: req.user._id, // Admin ID
-      status: "approved", // Admin-created vendors are auto-approved
-    });
-
-    res.status(201).json({
-      message: "Vendor created successfully",
-      vendor,
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
 // Admin updates vendor status (approve/reject)
 export const updateVendorStatus = async (req, res) => {
   try {
     const { id } = req.params;
-    const { status } = req.body; // status = approved/rejected
+    const { status } = req.body;
 
     if (!["approved", "rejected"].includes(status)) {
       return res.status(400).json({ message: "Invalid status. Use 'approved' or 'rejected'" });
@@ -107,7 +62,6 @@ export const updateVendorStatus = async (req, res) => {
     if (!vendor) return res.status(404).json({ message: "Vendor not found" });
 
     vendor.status = status;
-    // Set createdBy to admin who approved (if not already set)
     if (!vendor.createdBy) {
       vendor.createdBy = req.user._id;
     }
@@ -115,7 +69,13 @@ export const updateVendorStatus = async (req, res) => {
 
     res.json({ 
       message: `Vendor ${status} successfully`, 
-      vendor 
+      vendor: {
+        id: vendor._id,
+        storeName: vendor.storeName,
+        ownerName: vendor.ownerName,
+        email: vendor.email,
+        status: vendor.status,
+      }
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -125,10 +85,9 @@ export const updateVendorStatus = async (req, res) => {
 // Vendor gets own profile
 export const getVendorProfile = async (req, res) => {
   try {
-    const vendor = await Vendor.findOne({ userId: req.user._id });
+    const vendor = await Vendor.findById(req.user._id).select("-password");
     if (!vendor) return res.status(404).json({ message: "Vendor profile not found" });
 
-    // Check if vendor is approved
     if (vendor.status !== "approved") {
       return res.status(403).json({ 
         message: "Your vendor account is pending approval",
@@ -145,27 +104,23 @@ export const getVendorProfile = async (req, res) => {
 // Get all vendors (Admin) - can filter by status
 export const getAllVendors = async (req, res) => {
   try {
-    const { status } = req.query; // Optional filter: ?status=pending
+    const { status } = req.query;
     const query = status ? { status } : {};
-    const vendors = await Vendor.find(query).populate("userId", "name email");
+    const vendors = await Vendor.find(query).select("-password");
     res.json({ vendors });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-
-
-
-
-
+// Vendor dashboard
 export const vendorDashboard = (req, res) => {
   res.json({
     message: "Welcome Vendor",
-    user: req.user
+    vendor: {
+      id: req.user._id,
+      storeName: req.user.storeName,
+      ownerName: req.user.ownerName,
+    }
   });
-};
-
-export const vendorInventory = (req, res) => {
-  res.json({ message: "Vendor inventory will appear here" });
 };
