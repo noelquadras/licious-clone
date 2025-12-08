@@ -1,11 +1,9 @@
 import express from "express";
 import {
-  registerDeliveryPartner,
   createDeliveryPartner,
   assignDeliveryPartner,
   updateDeliveryStatus,
   getAssignedOrders,
-  linkUserToPartner,
   updateDeliveryPartnerStatus,
   getAllDeliveryPartners
 } from "../controllers/deliveryPartnerController.js";
@@ -13,11 +11,6 @@ import {
 import { protect, authorizeRoles, optionalProtect } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
-
-/**
- * Public self-registration for delivery partners
- */
-router.post("/register", registerDeliveryPartner);
 
 /**
  * Admin routes
@@ -61,16 +54,6 @@ router.put(
   "/update-status",
   optionalProtect,
   updateDeliveryStatus
-);
-
-/**
- * Link User account to DeliveryPartner (for delivery users)
- */
-router.post(
-  "/link-user",
-  protect,
-  authorizeRoles("delivery"),
-  linkUserToPartner
 );
 
 /**

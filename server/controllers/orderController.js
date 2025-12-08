@@ -1,7 +1,7 @@
 import Order from "../models/orderModel.js";
 import Cart from "../models/cartModel.js";
-import Product from "../models/productModel.js";
-import Vendor from "../models/vendorModel.js";
+// import Product from "../models/productModel.js";
+// import Vendor from "../models/vendorModel.js";
 import { clearCart } from "./cartController.js";
 
 // ---------------------------------------------

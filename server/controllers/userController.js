@@ -1,83 +1,63 @@
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-
 import User from "../models/userModel.js";
 
-// Register a new user (simple version)
-export const registerUser = async (req, res) => {
+// Get all users (Admin only - for management)
+export const getAllUsers = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
-
-    if (!name || !email || !password) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
-
-    const existingUser = await User.findOne({ email });
-
-    if (existingUser) {
-      return res.status(400).json({ message: "Email already exists" });
-    }
-
-    const user = await User.create({
-      name,
-      email,
-      password, // NOTE: we will hash this later
-      role,
-    });
-
-    res.status(201).json({ message: "User registered", user });
+    const users = await User.find().select("-password");
+    res.json(users);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-// Login user
-export const loginUser = async (req, res) => {
+// Get current user profile
+export const getCurrentUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
-
-    if (!email || !password) {
-      return res.status(400).json({ message: "Email and password required" });
-    }
-
-    const user = await User.findOne({ email });
-
+    const user = await User.findById(req.user._id).select("-password");
     if (!user) {
-      return res.status(400).json({ message: "Invalid email or password" });
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json({ user });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Update user location
+export const updateUserLocation = async (req, res) => {
+  try {
+    const { latitude, longitude, address } = req.body;
+
+    if (!latitude || !longitude) {
+      return res.status(400).json({ message: "Latitude and longitude are required" });
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
-
-    if (!isMatch) {
-      return res.status(400).json({ message: "Invalid email or password" });
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
 
-    const token = jwt.sign(
-      { id: user._id, role: user.role },
-      process.env.JWT_SECRET,
-      { expiresIn: "7d" }
-    );
+    user.location = {
+      type: "Point",
+      coordinates: [parseFloat(longitude), parseFloat(latitude)],
+    };
+
+    if (address) {
+      user.address = address;
+    }
+
+    await user.save();
 
     res.json({
-      message: "Login successful",
-      token,
+      message: "Location updated successfully",
       user: {
         id: user._id,
         name: user.name,
         email: user.email,
-        role: user.role,
-      }
+        location: user.location,
+        address: user.address,
+      },
     });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-// Get all users
-export const getAllUsers = async (req, res) => {
-  try {
-    const users = await User.find();
-    res.json(users);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

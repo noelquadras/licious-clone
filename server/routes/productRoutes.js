@@ -1,22 +1,76 @@
 import express from "express";
 import { protect, authorizeRoles } from "../middlewares/authMiddleware.js";
 import {
-  createProduct,
-  getAllProducts,
-  getProductById,
-  updateProduct,
-  deleteProduct,
-} from "../controllers/productController.js";
+  createBaseProduct,
+  getAllBaseProducts,
+  getBaseProductById,
+  updateBaseProduct,
+  deleteBaseProduct,
+  uploadBaseProductImages,
+} from "../controllers/baseProductController.js";
+import {
+  addToInventory,
+  getVendorInventory,
+  updateVendorProduct,
+  getProductsNearby,
+  getAllVendorProducts,
+  uploadVendorProductImages,
+} from "../controllers/vendorProductController.js";
 
 const router = express.Router();
 
-// Public route
-router.get("/", getAllProducts);
-router.get("/:id", getProductById);
+// ========== BASE PRODUCTS (Catalog) ==========
+// Public routes
+router.get("/base", getAllBaseProducts);
+router.get("/base/:id", getBaseProductById);
 
-// Protected routes
-router.post("/", protect, authorizeRoles("admin", "vendor"), createProduct);
-router.put("/:id", protect, authorizeRoles("admin", "vendor"), updateProduct);
-router.delete("/:id", protect, authorizeRoles("admin", "vendor"), deleteProduct);
+// Admin routes
+router.post(
+  "/base",
+  protect,
+  authorizeRoles("admin"),
+  uploadBaseProductImages,
+  createBaseProduct
+);
+router.put(
+  "/base/:id",
+  protect,
+  authorizeRoles("admin"),
+  uploadBaseProductImages,
+  updateBaseProduct
+);
+router.delete(
+  "/base/:id",
+  protect,
+  authorizeRoles("admin"),
+  deleteBaseProduct
+);
+
+// ========== VENDOR PRODUCTS (Inventory) ==========
+// Public routes
+router.get("/nearby", getProductsNearby); // Requires latitude, longitude query params
+router.get("/vendor", getAllVendorProducts);
+
+// Vendor routes
+router.post(
+  "/vendor/inventory",
+  protect,
+  authorizeRoles("vendor"),
+  uploadVendorProductImages,
+  addToInventory
+);
+router.get(
+  "/vendor/inventory",
+  protect,
+  authorizeRoles("vendor"),
+  getVendorInventory
+);
+router.put(
+  "/vendor/:id",
+  protect,
+  authorizeRoles("vendor"),
+  uploadVendorProductImages,
+  updateVendorProduct
+);
 
 export default router;
