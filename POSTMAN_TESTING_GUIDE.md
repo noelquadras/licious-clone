@@ -471,7 +471,7 @@ or
 | `/api/users/login`         | POST   |       No      |      |
 | `/api/vendors/register`    | POST   |       No      |      |
 | `/api/delivery/register`   | POST   |       No      |      |
-| `/api/products`            | GET    |       No      |   -   |
+| `/api/products`            | GET    |       No      |      |
 | `/api/cart`                | GET    |      Yes      | user  |
 | `/api/orders/place`        | POST   |      Yes      | user  |
 | `/api/vendors/status/:id`  | PUT    |      Yes      | admin |
