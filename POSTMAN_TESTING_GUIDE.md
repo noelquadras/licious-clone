@@ -467,7 +467,7 @@ or
 
 |           Route            | Method | Auth Required |  Role |
 |----------------------------|--------|---------------|-------|
-| `/api/users/register`      | POST   |       No      |   -   |
+| `/api/users/register`      | POST   |       No      |      |
 | `/api/users/login`         | POST   |       No      |   -   |
 | `/api/vendors/register`    | POST   |       No      |   -   |
 | `/api/delivery/register`   | POST   |       No      |   -   |
