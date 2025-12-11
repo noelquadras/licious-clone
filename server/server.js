@@ -12,8 +12,9 @@ import deliveryRoutes from "./routes/deliveryRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
-import deliveryPartnerRoutes from "./routes/deliveryPartnerRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import { errorHandler, notFound } from "./middlewares/errorMiddleware.js";
+import morgan from "morgan";
 
 dotenv.config();
 
@@ -24,6 +25,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Middleware
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
 app.use(express.json());
 
 // Serve static files (uploaded images)
@@ -41,13 +45,15 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/admin", adminRoutes);
-app.use("/api/vendor", vendorRoutes);
-app.use("/api/vendors", vendorRoutes); // Alias for consistency // redundant
-app.use("/api/deliver", deliveryRoutes);
+app.use("/api/vendors", vendorRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
-app.use("/api/delivery", deliveryPartnerRoutes);
+app.use("/api/delivery", deliveryRoutes);
+
+// Error Middleware
+app.use(notFound);
+app.use(errorHandler);
 
 // Server
 const PORT = process.env.PORT || 5000;

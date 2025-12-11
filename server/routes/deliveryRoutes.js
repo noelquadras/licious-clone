@@ -1,10 +1,69 @@
 import express from "express";
-import { protect, authorizeRoles } from "../middlewares/authMiddleware.js";
-import { deliveryDashboard, deliveryTasks } from "../controllers/deliveryController.js";
+import {
+    createDeliveryPartner,
+    assignDeliveryPartner,
+    updateDeliveryStatus,
+    getAssignedOrders,
+    updateDeliveryPartnerStatus,
+    getAllDeliveryPartners
+} from "../controllers/deliveryController.js";
+
+import { protect, authorizeRoles, optionalProtect } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/dashboard", protect, authorizeRoles("delivery"), deliveryDashboard);
-router.get("/tasks", protect, authorizeRoles("delivery"), deliveryTasks);
+/**
+ * Admin routes
+ */
+router.post(
+    "/create",
+    protect,
+    authorizeRoles("admin"),
+    createDeliveryPartner
+);
+
+router.get(
+    "/",
+    protect,
+    authorizeRoles("admin"),
+    getAllDeliveryPartners
+);
+
+router.put(
+    "/status/:id",
+    protect,
+    authorizeRoles("admin"),
+    updateDeliveryPartnerStatus
+);
+
+/**
+ * Admin assigns delivery partner to an order
+ */
+router.post(
+    "/assign",
+    protect,
+    authorizeRoles("admin"),
+    assignDeliveryPartner
+);
+
+/**
+ * Delivery partner updates delivery status
+ * Can be called by admin (with auth) or with deliveryPartnerId in body
+ */
+router.put(
+    "/update-status",
+    optionalProtect,
+    updateDeliveryStatus
+);
+
+/**
+ * Delivery partner views all assigned orders
+ */
+router.get(
+    "/my-orders",
+    protect,
+    authorizeRoles("delivery"),
+    getAssignedOrders
+);
 
 export default router;
