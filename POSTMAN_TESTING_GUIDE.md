@@ -12,7 +12,7 @@
 ## 1. Authentication
 ### User
 - **Register User**
-  - **POST** `/api/auth/user/register`
+  - **POST** `http://localhost:5000/api/auth/user/register`
   - **Body (JSON)**:
     ```json
     {
@@ -26,7 +26,7 @@
     }
     ```
 - **Login User**
-  - **POST** `/api/auth/user/login`
+  - **POST** `http://localhost:5000/api/auth/user/login`
   - **Body (JSON)**:
     ```json
     {
@@ -37,7 +37,7 @@
 
 ### Vendor
 - **Register Vendor (Self-Registration)**
-  - **POST** `/api/auth/vendor/register` (or `/api/vendors/register`)
+  - **POST** `http://localhost:5000/api/auth/vendor/register` (or `http://localhost:5000/api/vendors/register`)
   - **Body (JSON)**:
     ```json
     {
@@ -53,7 +53,7 @@
     }
     ```
 - **Login Vendor**
-  - **POST** `/api/auth/vendor/login`
+  - **POST** `http://localhost:5000/api/auth/vendor/login`
   - **Body (JSON)**:
     ```json
     {
@@ -64,7 +64,7 @@
 
 ### Delivery Partner
 - **Register Delivery Partner**
-  - **POST** `/api/auth/delivery/register`
+  - **POST** `http://localhost:5000/api/auth/delivery/register`
   - **Body (JSON)**:
     ```json
     {
@@ -79,7 +79,7 @@
     }
     ```
 - **Login Delivery Partner**
-  - **POST** `/api/auth/delivery/login`
+  - **POST** `http://localhost:5000/api/auth/delivery/login`
   - **Body (JSON)**:
     ```json
     {
@@ -90,7 +90,7 @@
 
 ### Admin
 - **Register Admin**
-  - **POST** `/api/auth/admin/register`
+  - **POST** `http://localhost:5000/api/auth/admin/register`
   - **Body (JSON)**:
     ```json
     {
@@ -101,7 +101,7 @@
     }
     ```
 - **Login Admin**
-  - **POST** `/api/auth/admin/login`
+  - **POST** `http://localhost:5000/api/auth/admin/login`
   - **Body (JSON)**:
     ```json
     {
@@ -116,9 +116,9 @@
 *Requires User Token*
 
 - **Get Profile**
-  - **GET** `/api/users/me`
+  - **GET** `http://localhost:5000/api/users/me`
 - **Update Location**
-  - **PUT** `/api/users/location`
+  - **PUT** `http://localhost:5000/api/users/location`
   - **Body (JSON)**:
     ```json
     {
@@ -134,14 +134,14 @@
 *Base Products are the global catalog items managed by Admin.*
 
 - **Get All Base Products (Public)**
-  - **GET** `/api/products/base`
+  - **GET** `http://localhost:5000/api/products/base`
   - **Query Params**: `?category=Chicken&status=active` (Optional)
 - **Get Base Product by ID (Public)**
-  - **GET** `/api/products/base/:id`
+  - **GET** `http://localhost:5000/api/products/base/:id`
 
 ### Admin Only
 - **Create Base Product**
-  - **POST** `/api/products/base`
+  - **POST** `http://localhost:5000/api/products/base`
   - **Params**: Form-Data (Multipart)
     - `name`: Chicken Curry Cut
     - `category`: Chicken
@@ -149,10 +149,10 @@
     - `basePrice`: 150
     - `images`: [Select Files]
 - **Update Base Product**
-  - **PUT** `/api/products/base/:id`
+  - **PUT** `http://localhost:5000/api/products/base/:id`
   - **Params**: Form-Data or JSON (if no images)
 - **Delete Base Product**
-  - **DELETE** `/api/products/base/:id`
+  - **DELETE** `http://localhost:5000/api/products/base/:id`
 
 ---
 
@@ -161,21 +161,21 @@
 
 ### Public / User
 - **Get Products Nearby**
-  - **GET** `/api/products/nearby?latitude=12.9716&longitude=77.5946`
+  - **GET** `http://localhost:5000/api/products/nearby?latitude=12.9716&longitude=77.5946`
   - **Query Params**: `maxDistance` (meters, default 5000), `category`
 - **Get All Vendor Products**
-  - **GET** `/api/products/vendor`
+  - **GET** `http://localhost:5000/api/products/vendor`
   - **Query Params**: `?vendorId=<id>`
 
 ### Vendor Only
 - **Add Product to Inventory** (From Base Catalog)
-  - **POST** `/api/products/vendor/inventory`
+  - **POST** `http://localhost:5000/api/products/vendor/inventory`
   - **Params**: Form-Data (for images) or JSON
     - `baseProductId`: `<base_product_id>`
     - `price`: 180
     - `stock`: 50
 - **Create Own Product** (New Base + Inventory)
-  - **POST** `/api/products/vendor/create-new`
+  - **POST** `http://localhost:5000/api/products/vendor/create-new`
   - **Params**: Form-Data
     - `name`: Special Marinade Chicken
     - `category`: Marinades
@@ -183,9 +183,9 @@
     - `stock`: 20
     - `images`: [Select Files]
 - **Get My Inventory**
-  - **GET** `/api/products/vendor/inventory`
+  - **GET** `http://localhost:5000/api/products/vendor/inventory`
 - **Update Vendor Product**
-  - **PUT** `/api/products/vendor/:id` (Vendor Product ID)
+  - **PUT** `http://localhost:5000/api/products/vendor/:id` (Vendor Product ID)
   - **Body (JSON)**:
     ```json
     {
@@ -201,9 +201,9 @@
 *Requires User Token*
 
 - **Get Cart**
-  - **GET** `/api/cart`
+  - **GET** `http://localhost:5000/api/cart`
 - **Add to Cart**
-  - **POST** `/api/cart/add`
+  - **POST** `http://localhost:5000/api/cart/add`
   - **Body (JSON)**:
     ```json
     {
@@ -212,7 +212,7 @@
     }
     ```
 - **Remove from Cart**
-  - **POST** `/api/cart/remove`
+  - **POST** `http://localhost:5000/api/cart/remove`
   - **Body (JSON)**:
     ```json
     {
@@ -225,33 +225,33 @@
 ## 6. Orders
 ### User
 - **Place Order**
-  - **POST** `/api/orders/place`
+  - **POST** `http://localhost:5000/api/orders/place`
   - **Body (JSON)**: `{}` (Uses items from cart)
 - **Get My Orders**
-  - **GET** `/api/orders/my-orders`
+  - **GET** `http://localhost:5000/api/orders/my-orders`
 
 ### Vendor
 - **Get Vendor Orders**
-  - **GET** `/api/orders/vendor`
+  - **GET** `http://localhost:5000/api/orders/vendor`
 
 ### Admin
 - **Get All Orders**
-  - **GET** `/api/orders/all`
+  - **GET** `http://localhost:5000/api/orders/all`
 
 ---
 
 ## 7. Delivery Management
 ### Admin
 - **Create Delivery Partner**
-  - **POST** `/api/delivery/create`
+  - **POST** `http://localhost:5000/api/delivery/create`
   - **Body**: Similar to Auth register body.
 - **Get All Delivery Partners**
-  - **GET** `/api/delivery`
+  - **GET** `http://localhost:5000/api/delivery`
 - **Update Partner Status** (Approve/Reject)
-  - **PUT** `/api/delivery/status/:id`
+  - **PUT** `http://localhost:5000/api/delivery/status/:id`
   - **Body (JSON)**: `{"status": "approved"}`
 - **Assign Partner to Order**
-  - **POST** `/api/delivery/assign`
+  - **POST** `http://localhost:5000/api/delivery/assign`
   - **Body (JSON)**:
     ```json
     {
@@ -262,7 +262,7 @@
 
 ### Delivery Partner / Admin
 - **Update Order Delivery Status**
-  - **PUT** `/api/delivery/update-status`
+  - **PUT** `http://localhost:5000/api/delivery/update-status`
   - **Body (JSON)**:
     ```json
     {
@@ -273,7 +273,7 @@
     ```
     *(Note: `deliveryPartnerId` required if not Admin)*
 - **Get Assigned Orders** (Delivery Partner Dashboard)
-  - **GET** `/api/delivery/my-orders`
+  - **GET** `http://localhost:5000/api/delivery/my-orders`
 
 ---
 
@@ -281,16 +281,16 @@
 *Requires Admin Token*
 
 - **Get Dashboard Stats**
-  - **GET** `/api/admin/dashboard`
+  - **GET** `http://localhost:5000/api/admin/dashboard`
 - **Get All Users**
-  - **GET** `/api/users` (Admin access only)
+  - **GET** `http://localhost:5000/api/users` (Admin access only)
 - **Get All Vendors**
-  - **GET** `/api/vendors` (?status=pending)
+  - **GET** `http://localhost:5000/api/vendors` (?status=pending)
 - **Approve/Reject Vendor**
-  - **PUT** `/api/vendors/status/:id`
+  - **PUT** `http://localhost:5000/api/vendors/status/:id`
   - **Body (JSON)**: `{"status": "approved"}`
 - **Get All Delivery Partners**
-  - **GET** `/api/admin/delivery` (or `/api/delivery`)
+  - **GET** `http://localhost:5000/api/admin/delivery` (or `http://localhost:5000/api/delivery`)
 
 ---
 
