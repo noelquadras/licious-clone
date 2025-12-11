@@ -467,11 +467,11 @@ or
 
 |           Route            | Method | Auth Required |  Role |
 |----------------------------|--------|---------------|-------|
-| `/api/users/register`      | POST   |       No      |   -   |
-| `/api/users/login`         | POST   |       No      |   -   |
-| `/api/vendors/register`    | POST   |       No      |   -   |
-| `/api/delivery/register`   | POST   |       No      |   -   |
-| `/api/products`            | GET    |       No      |   -   |
+| `/api/users/register`      | POST   |       No      |      |
+| `/api/users/login`         | POST   |       No      |      |
+| `/api/vendors/register`    | POST   |       No      |      |
+| `/api/delivery/register`   | POST   |       No      |      |
+| `/api/products`            | GET    |       No      |      |
 | `/api/cart`                | GET    |      Yes      | user  |
 | `/api/orders/place`        | POST   |      Yes      | user  |
 | `/api/vendors/status/:id`  | PUT    |      Yes      | admin |
