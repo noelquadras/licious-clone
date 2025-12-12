@@ -175,7 +175,7 @@
     - `baseProductId`: `<base_product_id>`
     - `price`: 180
     - `stock`: 50
-- **Create Own Product** (New Base + Inventory)
+- **Create Own Product** (Standalone Product)
   - **POST** `http://localhost:5000/api/products/vendor/create-new`
   - **Params**: Form-Data
     - `name`: Special Marinade Chicken
