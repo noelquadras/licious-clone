@@ -302,3 +302,21 @@
   - **POST** `/api/payment/create-order`
 - **Verify Payment**
   - **POST** `/api/payment/verify`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Added from VENDOR_PRODUCT_TESTING_GUIDE.md
+
