@@ -119,29 +119,39 @@ export const getVendorInventory = async (req, res) => {
       .sort({ createdAt: -1 });
 
     // Normalize response
-    const normalizedProducts = vendorProducts.map(vp => {
-      let productObj = vp.toObject();
+    const normalizedProducts = vendorProducts.map((vp) => {
+      const productObj = vp.toObject();
+      const base = productObj.baseProduct;
 
-      if (productObj.baseProduct) {
-        productObj.name = productObj.name || productObj.baseProduct.name;
-        productObj.category = productObj.category || productObj.baseProduct.category;
-        productObj.description = productObj.description || productObj.baseProduct.description;
-        if (!productObj.images || productObj.images.length === 0) {
-          productObj.images = productObj.baseProduct.images;
-        }
-      }
-
-      if (!productObj.baseProduct) {
-        productObj.baseProduct = {
+      return {
+        _id: productObj._id,
+        vendor: productObj.vendor,
+        // Prioritize vendor-specific fields, fallback to baseProduct fields
+        name: productObj.name || (base ? base.name : undefined),
+        category: productObj.category || (base ? base.category : undefined),
+        description: productObj.description || (base ? base.description : ""),
+        price: productObj.price,
+        stock: productObj.stock,
+        // Use vendor images if available, otherwise base images
+        images: (productObj.images && productObj.images.length > 0)
+          ? productObj.images
+          : (base ? base.images : []),
+        addedBy: productObj.addedBy,
+        lastUpdatedBy: productObj.lastUpdatedBy,
+        status: productObj.status,
+        createdAt: productObj.createdAt,
+        updatedAt: productObj.updatedAt,
+        __v: productObj.__v,
+        // Keep baseProduct
+        baseProduct: base ? base : {
           _id: productObj._id,
           name: productObj.name,
           category: productObj.category,
           description: productObj.description,
           images: productObj.images,
           basePrice: productObj.price
-        };
-      }
-      return productObj;
+        }
+      };
     });
 
     res.json({ vendorProducts: normalizedProducts });
@@ -201,31 +211,38 @@ export const getProductsNearby = async (req, res) => {
       .populate("addedBy", "storeName")
       .populate("lastUpdatedBy", "storeName");
 
-    // Calculate distance for each vendor
+    // Calculate distance and normalize for each vendor
     const productsWithDistance = vendorProducts.map((vp) => {
       const vendor = vp.vendor;
-      let productObj = vp.toObject();
+      const productObj = vp.toObject();
+      const base = productObj.baseProduct;
 
-      // Normalize standalone products to look like linked products for frontend compatibility
-      if (productObj.baseProduct) {
-        productObj.name = productObj.name || productObj.baseProduct.name;
-        productObj.category = productObj.category || productObj.baseProduct.category;
-        productObj.description = productObj.description || productObj.baseProduct.description;
-        if (!productObj.images || productObj.images.length === 0) {
-          productObj.images = productObj.baseProduct.images;
-        }
-      }
-
-      if (!productObj.baseProduct) {
-        productObj.baseProduct = {
+      const normalizedProduct = {
+        _id: productObj._id,
+        vendor: productObj.vendor,
+        name: productObj.name || (base ? base.name : undefined),
+        category: productObj.category || (base ? base.category : undefined),
+        description: productObj.description || (base ? base.description : ""),
+        price: productObj.price,
+        stock: productObj.stock,
+        images: (productObj.images && productObj.images.length > 0)
+          ? productObj.images
+          : (base ? base.images : []),
+        addedBy: productObj.addedBy,
+        lastUpdatedBy: productObj.lastUpdatedBy,
+        status: productObj.status,
+        createdAt: productObj.createdAt,
+        updatedAt: productObj.updatedAt,
+        __v: productObj.__v,
+        baseProduct: base ? base : {
           _id: productObj._id,
           name: productObj.name,
           category: productObj.category,
           description: productObj.description,
           images: productObj.images,
           basePrice: productObj.price
-        };
-      }
+        }
+      };
 
       if (vendor.location && vendor.location.coordinates) {
         const [lng, lat] = vendor.location.coordinates;
@@ -236,11 +253,11 @@ export const getProductsNearby = async (req, res) => {
           lng
         );
         return {
-          ...productObj,
+          ...normalizedProduct,
           distance: Math.round(distance * 100) / 100, // Round to 2 decimal places (km)
         };
       }
-      return productObj;
+      return normalizedProduct;
     });
 
     res.json({
@@ -298,28 +315,38 @@ export const getAllVendorProducts = async (req, res) => {
 
     // Normalize response
     const normalizedProducts = vendorProducts.map(vp => {
-      let productObj = vp.toObject();
+      const productObj = vp.toObject();
+      const base = productObj.baseProduct;
 
-      if (productObj.baseProduct) {
-        productObj.name = productObj.name || productObj.baseProduct.name;
-        productObj.category = productObj.category || productObj.baseProduct.category;
-        productObj.description = productObj.description || productObj.baseProduct.description;
-        if (!productObj.images || productObj.images.length === 0) {
-          productObj.images = productObj.baseProduct.images;
-        }
-      }
-
-      if (!productObj.baseProduct) {
-        productObj.baseProduct = {
+      return {
+        _id: productObj._id,
+        vendor: productObj.vendor,
+        // Prioritize vendor-specific fields, fallback to baseProduct fields
+        name: productObj.name || (base ? base.name : undefined),
+        category: productObj.category || (base ? base.category : undefined),
+        description: productObj.description || (base ? base.description : ""),
+        price: productObj.price,
+        stock: productObj.stock,
+        // Use vendor images if available, otherwise base images
+        images: (productObj.images && productObj.images.length > 0)
+          ? productObj.images
+          : (base ? base.images : []),
+        addedBy: productObj.addedBy,
+        lastUpdatedBy: productObj.lastUpdatedBy,
+        status: productObj.status,
+        createdAt: productObj.createdAt,
+        updatedAt: productObj.updatedAt,
+        __v: productObj.__v,
+        // Keep baseProduct if it exists, or create a virtual one to ensure consistency (matching the "wrong" but possibly desired structure from Step 0 if users rely on it, but user said "just like this" in step 82 which HAS it)
+        baseProduct: base ? base : {
           _id: productObj._id,
           name: productObj.name,
           category: productObj.category,
           description: productObj.description,
           images: productObj.images,
           basePrice: productObj.price
-        };
-      }
-      return productObj;
+        }
+      };
     });
 
     res.json({ vendorProducts: normalizedProducts });
