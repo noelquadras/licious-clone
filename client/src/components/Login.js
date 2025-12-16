@@ -1,3 +1,5 @@
+//Login.js
+
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -22,8 +24,10 @@ const Login = () => {
       // CRITICAL STEP: Save the token to LocalStorage
       // The backend likely returns { token: "...", user: {...} }
       // Adjust 'res.data.token' if your backend names it differently (e.g. res.data.accessToken)
-      const token = res.data.token || res.data.accessToken; 
+      const token = res.data.token || res.data.accessToken;
+      const user = res.data.user; 
       localStorage.setItem('token', token);
+      localStorage.setItem('username', user.name);
       
       alert('Login Successful!');
       navigate('/'); // Redirect to Home
