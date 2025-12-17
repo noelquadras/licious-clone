@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { getUserTypeFromToken } from "../utils/auth.js";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -16,26 +17,40 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await axios.post('/api/auth/user/login', formData);
-      console.log('Login Success:', res.data);
-      
-      // CRITICAL STEP: Save the token to LocalStorage
-      // The backend likely returns { token: "...", user: {...} }
-      // Adjust 'res.data.token' if your backend names it differently (e.g. res.data.accessToken)
-      const token = res.data.token || res.data.accessToken;
-      const user = res.data.user; 
-      localStorage.setItem('token', token);
-      localStorage.setItem('username', user.name);
-      
-      alert('Login Successful!');
-      navigate('/'); // Redirect to Home
-    } catch (error) {
-      console.error('Login Error:', error.response?.data || error.message);
-      alert('Invalid Credentials');
+  e.preventDefault();
+  try {
+    const res = await axios.post('/api/auth/user/login', formData);
+
+    const token = res.data.token || res.data.accessToken;
+    const user = res.data.user;
+
+    localStorage.setItem('token', token);
+    localStorage.setItem('username', user.name);
+
+    const userType = getUserTypeFromToken();
+
+    alert('Login Successful!');
+
+    switch (userType) {
+      case "admin":
+        navigate("/admin");
+        break;
+      case "vendor":
+        navigate("/vendor");
+        break;
+      case "delivery":
+        navigate("/deliveryPerson");
+        break;
+      default:
+        navigate("/");
     }
-  };
+
+  } catch (error) {
+    console.error('Login Error:', error.response?.data || error.message);
+    alert('Invalid Credentials');
+  }
+};
+
 
   const inputStyle = { display: 'block', width: '100%', padding: '10px', marginBottom: '10px', borderRadius: '5px', border: '1px solid #ddd' };
 
