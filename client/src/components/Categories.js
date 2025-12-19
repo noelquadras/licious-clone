@@ -1,27 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-// Product Card Component
-const ProductCard = ({ product }) => {
-  return (
-    <div className="product-card">
-      <h3>{product.name}</h3>
-      <p className="product-category">Category: {product.category}</p>
-      <p className="product-description">{product.description}</p>
-      <div className="product-footer">
-        <strong className="product-price">
-          ${product.price || product.basePrice || "N/A"}
-        </strong>
-        <span className={`product-status ${product.status}`}>
-          {product.status || "unknown"}
-        </span>
-      </div>
-      {product.stock !== undefined && (
-        <p className="product-stock">Stock: {product.stock}</p>
-      )}
-    </div>
-  );
-};
+import ProductCard from "./ProductCard";
 
 // Category Button Component
 const CategoryButton = ({ category, isSelected, onClick }) => {

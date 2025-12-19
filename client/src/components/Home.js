@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Categories from "./Categories";
+import ProductCard from "./ProductCard";
 
 const Home = () => {
   const [items, setItems] = useState([]);
@@ -67,32 +68,7 @@ const Home = () => {
               textAlign: "center",
             }}
           >
-            {/* If images exist and is an array, show the first one */}
-            {item.images && item.images[0] && (
-              <img
-                src={item.images[0] || item.images}
-                alt={item.name}
-                style={{ width: "100%", height: "150px", objectFit: "cover" }}
-              />
-            )}
-            <h3>{item.name}</h3>
-            <p>{item.description}</p>
-            <p style={{ fontWeight: "bold", color: "#d92662" }}>
-              ₹{item.price}
-            </p>
-            <button
-              onClick={() => addToCart(item._id)} 
-              style={{
-                backgroundColor: "#d92662",
-                color: "white",
-                border: "none",
-                padding: "10px",
-                borderRadius: "4px",
-                cursor: "pointer",
-              }}
-            >
-              Add to Cart
-            </button>
+            <ProductCard product={item} addToCart={() => addToCart(item._id)} />
           </div>
         ))}
       </div>

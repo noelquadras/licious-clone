@@ -167,9 +167,7 @@ const Profile = () => {
                           onMouseEnter={() => setHoveredOrderId(orderId)}
                           onMouseLeave={() => setHoveredOrderId(null)}
                           style={{ 
-                            cursor: "pointer",
-                            transition: "color 0.2s",
-                            color: hoveredOrderId === orderId ? "#007bff" : "inherit"
+                            transition: "color 0.2s", cursor: "default"
                           }}
                         >
                           {hoveredOrderId === orderId 
