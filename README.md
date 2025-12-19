@@ -27,7 +27,7 @@ A full-stack e-commerce application replicating the core features of Licious, a 
 ### Installation
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/noelquadras/licious-clone
 cd licious-clone
 npm install
 ```
