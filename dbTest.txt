@@ -2,8 +2,7 @@
 
 This guide details how to test the new feature allowing vendors to create their own products.
 
-## Base URL
-`http://localhost:5000`
+
 
 ---
 
