@@ -2,11 +2,16 @@
   "name": "licious-clone",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "private": true,
+  "packageManager": "npm@10.8.2",
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "backend"
+  ],
   "scripts": {
-    "server": "cd server && npm start",
-    "client": "cd client && npm start",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "turbo dev",
+    "build": "turbo build"
   },
   "repository": {
     "type": "git",
@@ -15,13 +20,13 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/noelquadras/licious-clone/issues"
   },
   "homepage": "https://github.com/noelquadras/licious-clone#readme",
   "devDependencies": {
-    "concurrently": "^9.2.1"
+    "eslint-config-react-app": "^7.0.1",
+    "turbo": "^2.0.0"
   },
   "dependencies": {
     "jwt-decode": "^4.0.0"
