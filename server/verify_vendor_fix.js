@@ -17,7 +17,6 @@ const verify = async () => {
         await mongoose.connect(process.env.MONGO_URI);
         console.log("Connected.");
 
-
         // Cleanup test data
         const email = "testvendor_unique@example.com";
         await Vendor.deleteOne({ email });
@@ -31,7 +30,6 @@ const verify = async () => {
         });
         console.log("Created test vendor:", vendor._id);
 
-
         // Test 1: Create standalone product 1
         console.log("Creating standalone product 1...");
         const p1 = await VendorProduct.create({
@@ -43,7 +41,6 @@ const verify = async () => {
         });
         console.log("Created P1:", p1._id);
 
-        
         // Test 2: Create standalone product 2
         console.log("Creating standalone product 2...");
         const p2 = await VendorProduct.create({
