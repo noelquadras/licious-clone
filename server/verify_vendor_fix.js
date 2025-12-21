@@ -24,7 +24,7 @@ const verify = async () => {
             storeName: "Test Store",
             ownerName: "Test Owner",
             password: "password123",
-            phone: "1234567890",
+
         });
         console.log("Created test vendor:", vendor._id);
 
