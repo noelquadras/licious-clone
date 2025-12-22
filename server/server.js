@@ -20,29 +20,28 @@ dotenv.config();
 
 const app = express();
 
-
+// Get directory name for ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-
+// Middleware
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 app.use(express.json());
 
-
+// Serve static files (uploaded images)
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-
-
+// Connect to database
 connectDB();
 
-
+// Root route
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
 
-
+// API Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/admin", adminRoutes);
@@ -52,11 +51,11 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/delivery", deliveryRoutes);
 
-
+// Error Middleware
 app.use(notFound);
 app.use(errorHandler);
 
-
+// Server
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
