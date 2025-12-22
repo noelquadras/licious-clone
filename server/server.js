@@ -33,10 +33,11 @@ app.use(express.json());
 // Serve static files (uploaded images)
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Connect to database
+
+
 connectDB();
 
-// Root route
+
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
