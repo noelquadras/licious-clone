@@ -41,7 +41,7 @@ app.get("/", (req, res) => {
   res.send("API is running...");
 });
 
-// API Routes
+
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/admin", adminRoutes);
@@ -51,11 +51,11 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/delivery", deliveryRoutes);
 
-// Error Middleware
+
 app.use(notFound);
 app.use(errorHandler);
 
-// Server
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
