@@ -451,9 +451,6 @@ or
 2. View pending delivery partners: `GET /api/delivery?status=pending`
 3. Approve/reject as needed
 
----
-
-## 📝 NOTES
 
 - Replace `:id` with actual MongoDB ObjectId
 - Replace `<TOKEN>` with actual JWT token from login
