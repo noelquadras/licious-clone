@@ -385,17 +385,6 @@ or
 **Headers:** `Authorization: Bearer <ADMIN_TOKEN>` or `<DELIVERY_TOKEN>`  
 **Body:**
 ```json
-{
-  "status": "confirmed"
-}
-```
-**Valid statuses:** `"pending"`, `"confirmed"`, `"out-for-delivery"`, `"delivered"`, `"cancelled"`
-
-### 5. Get Vendor Orders (Vendor)
-**Method:** `GET`  
-**URL:** `http://localhost:5000/api/orders/vendor`  
-**Headers:** `Authorization: Bearer <VENDOR_TOKEN>`  
-**Body:** None
 
 ---
 
