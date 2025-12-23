@@ -461,9 +461,6 @@ or
 - Status enums are case-sensitive
 - Payment routes are disabled (commented out in server.js)
 
----
-
-## 🔍 QUICK REFERENCE
 
 |           Route            | Method | Auth Required |  Role |
 |----------------------------|--------|---------------|-------|
@@ -478,7 +475,4 @@ or
 | `/api/delivery/status/:id` | PUT    |      Yes      | admin |
 
 
----
-
-**Happy Testing! 🚀**
 
