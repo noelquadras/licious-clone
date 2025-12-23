@@ -385,6 +385,17 @@ or
 **Headers:** `Authorization: Bearer <ADMIN_TOKEN>` or `<DELIVERY_TOKEN>`  
 **Body:**
 ```json
+{
+  "status": "confirmed"
+}
+```
+**Valid statuses:** `"pending"`, `"confirmed"`, `"out-for-delivery"`, `"delivered"`, `"cancelled"`
+
+### 5. Get Vendor Orders (Vendor)
+**Method:** `GET`  
+**URL:** `http://localhost:5000/api/orders/vendor`  
+**Headers:** `Authorization: Bearer <VENDOR_TOKEN>`  
+**Body:** None
 
 ---
 
@@ -396,7 +407,17 @@ or
 **Headers:** `Authorization: Bearer <ADMIN_TOKEN>`  
 **Body:** None
 
+### 2. Get Vendors (Admin)
+**Method:** `GET`  
+**URL:** `http://localhost:5000/api/admin/vendors`  
+**Headers:** `Authorization: Bearer <ADMIN_TOKEN>`  
+**Body:** None
 
+### 3. Get Delivery Partners (Admin)
+**Method:** `GET`  
+**URL:** `http://localhost:5000/api/admin/delivery`  
+**Headers:** `Authorization: Bearer <ADMIN_TOKEN>`  
+**Body:** None
 
 ---
 
@@ -430,6 +451,9 @@ or
 2. View pending delivery partners: `GET /api/delivery?status=pending`
 3. Approve/reject as needed
 
+---
+
+## 📝 NOTES
 
 - Replace `:id` with actual MongoDB ObjectId
 - Replace `<TOKEN>` with actual JWT token from login
@@ -437,6 +461,9 @@ or
 - Status enums are case-sensitive
 - Payment routes are disabled (commented out in server.js)
 
+---
+
+## 🔍 QUICK REFERENCE
 
 |           Route            | Method | Auth Required |  Role |
 |----------------------------|--------|---------------|-------|
@@ -451,4 +478,7 @@ or
 | `/api/delivery/status/:id` | PUT    |      Yes      | admin |
 
 
+---
+
+**Happy Testing! 🚀**
 
