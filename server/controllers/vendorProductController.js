@@ -400,10 +400,7 @@ export const createVendorOwnProduct = async (req, res) => {
   }
 };
 
-// Get single vendor product by ID
-export const getVendorProductById = async (req, res) => {
-  try {
-    const productId = req.params.id;
+
 
 
 
