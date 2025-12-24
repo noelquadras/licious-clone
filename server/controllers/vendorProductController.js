@@ -405,11 +405,7 @@ export const getVendorProductById = async (req, res) => {
   try {
     const productId = req.params.id;
 
-    const vendorProduct = await VendorProduct.findById(productId)
-      .populate("baseProduct")
-      .populate("vendor", "storeName ownerName location address")
-      .populate("addedBy", "storeName")
-      .populate("lastUpdatedBy", "storeName");
+
 
     if (!vendorProduct) {
       return res.status(404).json({ message: "Product not found" });
