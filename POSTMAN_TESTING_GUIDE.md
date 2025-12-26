@@ -407,9 +407,3 @@ Check if the product is visible to users (e.g., via "Nearby Products").
     *(Replace lat/long with coordinates near the vendor's location)*
 *   **Response:** The product should be listed if within range.
 
-
-## 📝 Troubleshooting
-
-*   **401 Unauthorized:** check if you included `Bearer ` prefix in the token.
-*   **403 Forbidden:** check if the user role is actually `vendor`.
-*   **400 Bad Request:** check if all required fields (`name`, `category`, `price`) are provided.
