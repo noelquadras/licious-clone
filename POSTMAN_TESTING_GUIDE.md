@@ -390,5 +390,27 @@ Use the token to create a new product.
     }
     ```
 
+### 3. Verify Product in Inventory
+Check if the product appears in the vendor's inventory.
 
+*   **Method:** `GET`
+*   **URL:** `http://localhost:5000/api/products/vendor/inventory`
+*   **Headers:**
+    *   `Authorization`: `Bearer <YOUR_VENDOR_TOKEN>`
+*   **Response:** The list should include the newly created product.
 
+### 4. Verify Product in Public Feed (Optional)
+Check if the product is visible to users (e.g., via "Nearby Products").
+
+*   **Method:** `GET`
+*   **URL:** `http://localhost:5000/api/products/nearby?latitude=12.9716&longitude=77.5946`
+    *(Replace lat/long with coordinates near the vendor's location)*
+*   **Response:** The product should be listed if within range.
+
+---
+
+## 📝 Troubleshooting
+
+*   **401 Unauthorized:** check if you included `Bearer ` prefix in the token.
+*   **403 Forbidden:** check if the user role is actually `vendor`.
+*   **400 Bad Request:** check if all required fields (`name`, `category`, `price`) are provided.
