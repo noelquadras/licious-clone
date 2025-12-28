@@ -23,28 +23,5 @@ export const getCurrentUser = async (req, res) => {
   }
 };
 
-// Update user location
-export const updateUserLocation = async (req, res) => {
-  try {
-    const { latitude, longitude, address } = req.body;
 
-    if (!latitude || !longitude) {
-      return res.status(400).json({ message: "Latitude and longitude are required" });
-    }
-
-    const user = await User.findById(req.user._id);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    user.location = {
-      type: "Point",
-      coordinates: [parseFloat(longitude), parseFloat(latitude)],
-    };
-
-    if (address) {
-      user.address = address;
-    }
-
-    await user.save();
 
