@@ -10,6 +10,7 @@ import Cart from "./components/Cart";
 import Categories from "./components/Categories";
 import Stores from "./components/Stores";
 import Profile from "./components/Profile";
+import ItemPage from "./components/ItemPage";
 // import other components as needed
 // import AdminDashboard from "./components/AdminDashboard";
 // import VendorDashboard from "./components/VendorDashboard";
@@ -28,7 +29,8 @@ function App() {
             <Route path="/cart" element={<Cart />} />
             <Route path="/categories" element={<Categories />} />
             <Route path="/stores" element={<Stores />} />
-            <Route path="/profile" element={<Profile/>} /> 
+            <Route path="/profile" element={<Profile/>} />
+            <Route path="/product/:id" element={<ItemPage/>} />
             {/* <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/vendor" element={<VendorDashboard />} />
             <Route path="/deliveryPerson" element={<DeliveryDashboard />} /> */}

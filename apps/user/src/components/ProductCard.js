@@ -1,6 +1,12 @@
+import { Link } from "react-router-dom";
+
 const ProductCard = ({ product, addToCart }) => {
   return (
     <div className="product-card">
+      <Link
+        to={`/product/${product._id}`}
+        style={{ textDecoration: "none", color: "inherit" }}
+      >
       {product.images && product.images[0] && (
         <img
           src={product.images[0] || product.images}
@@ -14,6 +20,7 @@ const ProductCard = ({ product, addToCart }) => {
       <strong style={{ fontWeight: "bold", color: "#d92662" }}>
         ₹{product.price || product.basePrice || "N/A"}
       </strong>
+      </Link>
       
       <button
         onClick={() => addToCart(product._id)}

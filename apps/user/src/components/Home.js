@@ -46,6 +46,7 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
+    if (!localStorage.token) return;
     const storedUsername = localStorage.getItem("username");
     setUsername(storedUsername);
   }, []);
