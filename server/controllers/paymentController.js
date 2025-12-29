@@ -23,24 +23,24 @@ export const createPaymentOrder = async (req, res) => {
 
     const razorpayOrder = await razorpay.orders.create(options);
 
-//     // Create Payment record
-//     await Payment.create({
-//       razorpayOrderId: razorpayOrder.id,
-//       amount: order.totalAmount,
-//       user: req.user._id,
-//       order: orderId,
-//     });
+    // Create Payment record
+    await Payment.create({
+      razorpayOrderId: razorpayOrder.id,
+      amount: order.totalAmount,
+      user: req.user._id,
+      order: orderId,
+    });
 
-//     res.json({
-//       message: "Razorpay order created",
-//       orderId: razorpayOrder.id,
-//       amount: order.totalAmount,
-//       currency: "INR",
-//     });
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// };
+    res.json({
+      message: "Razorpay order created",
+      orderId: razorpayOrder.id,
+      amount: order.totalAmount,
+      currency: "INR",
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 
 
