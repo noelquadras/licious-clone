@@ -31,16 +31,16 @@ export const createPaymentOrder = async (req, res) => {
       order: orderId,
     });
 
-    res.json({
-      message: "Razorpay order created",
-      orderId: razorpayOrder.id,
-      amount: order.totalAmount,
-      currency: "INR",
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+//     res.json({
+//       message: "Razorpay order created",
+//       orderId: razorpayOrder.id,
+//       amount: order.totalAmount,
+//       currency: "INR",
+//     });
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// };
 
 
 
