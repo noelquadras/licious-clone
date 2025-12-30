@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const ProductCard = ({ product }) => {
   const addToCart = async (vendorProductId) => {
@@ -7,7 +8,7 @@ const ProductCard = ({ product }) => {
       const token = localStorage.getItem("token");
 
       if (!token) {
-        alert("Please log in to add items to your cart.");
+        toast.info("Please log in to add items to your cart.");
         window.location.href = "/login";
         return;
       }
@@ -24,7 +25,7 @@ const ProductCard = ({ product }) => {
           },
         }
       );
-      alert("Item added to cart!");
+      toast.info("Item added to cart!");
       window.dispatchEvent(new Event('cartUpdated'));
     } catch (error) {
       console.error(

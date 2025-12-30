@@ -1,4 +1,6 @@
 import React from "react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 // Import your components
@@ -21,6 +23,7 @@ function App() {
     <Router>
       <div className="App">
         <Navbar />
+        <ToastContainer />
         <div style={{ padding: "20px" }}>
           <Routes>
             <Route path="/" element={<Home />} />

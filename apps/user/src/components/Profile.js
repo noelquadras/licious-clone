@@ -152,6 +152,9 @@ const Profile = () => {
                     marginBottom: "15px",
                     backgroundColor: "#f9f9f9",
                   }}
+                  onClick={() => {
+                    setSelectedOrder(order);
+                  }}
                 >
                   <div
                     style={{
@@ -228,31 +231,12 @@ const Profile = () => {
                         </div>
                       )}
                     </div>
-
-                    {/* Order actions or additional info */}
-                    <div>
-                      <button
-                        style={{
-                          padding: "5px 15px",
-                          backgroundColor: "#007bff",
-                          color: "white",
-                          border: "none",
-                          borderRadius: "4px",
-                          cursor: "pointer",
-                        }}
-                        onClick={() => {
-                          setSelectedOrder(order);
-                        }}
-                      >
-                        View Details
-                      </button>
-                      {selectedOrder && (
-                        <OrderDetailsModal
-                          order={selectedOrder}
-                          onClose={() => setSelectedOrder(null)}
-                        />
-                      )}
-                    </div>
+                    {selectedOrder && (
+                      <OrderDetailsModal
+                        order={selectedOrder}
+                        onClose={() => setSelectedOrder(null)}
+                      />
+                    )}
                   </div>
                 </li>
               );

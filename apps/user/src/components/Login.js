@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { toast } from "react-toastify";
 import { getUserTypeFromToken } from "../utils/auth.js";
 
 const Login = () => {
@@ -31,7 +32,7 @@ const Login = () => {
 
     const userType = getUserTypeFromToken();
 
-    alert('Login Successful!');
+    toast.info('Login Successful!');
 
     switch (userType) {
       case "admin":
