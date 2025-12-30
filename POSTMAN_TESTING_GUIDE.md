@@ -160,6 +160,15 @@
 ## 4. Vendor Inventory & Products
 *Vendor specific products available for sale.*
 
+### Public Vendor Discovery
+- **Get All Approved Vendors**
+  - **GET** `http://localhost:5000/api/vendors/public/list`
+  - **Response**: List of all approved vendors.
+- **Get Nearest Approved Vendors**
+  - **GET** `http://localhost:5000/api/vendors/public/nearest?latitude=12.9716&longitude=77.5946`
+  - **Query Params**: `latitude`, `longitude` (Required)
+  - **Response**: List of approved vendors within 5km radius.
+
 ### Public / User
 - **Get Products Nearby**
   - **GET** `http://localhost:5000/api/products/nearby?latitude=12.9716&longitude=77.5946`
@@ -214,7 +223,7 @@
       "quantity": 1
     }
     ```
-- **Remove from Cart**
+- **Remove from Cart (Decrement Quantity)**
   - **POST** `http://localhost:5000/api/cart/remove`
   - **Body (JSON)**:
     ```json
@@ -222,6 +231,7 @@
       "vendorProductId": "<vendor_product_id>"
     }
     ```
+  - **Note**: This decrements the quantity by 1. If quantity becomes 0, the item is removed from the cart.
 
 ---
 
