@@ -25,7 +25,7 @@ const ProductCard = ({ product }) => {
           },
         }
       );
-      toast.info("Item added to cart!");
+      toast.info("Item added to cart!", {position: "top-center", closeOnClick: true});
       window.dispatchEvent(new Event('cartUpdated'));
     } catch (error) {
       console.error(

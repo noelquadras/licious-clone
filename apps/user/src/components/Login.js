@@ -32,7 +32,7 @@ const Login = () => {
 
     const userType = getUserTypeFromToken();
 
-    toast.info('Login Successful!');
+    toast.info('Login Successful!', {position:"top-center"});
 
     switch (userType) {
       case "admin":

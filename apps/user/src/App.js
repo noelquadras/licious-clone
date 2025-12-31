@@ -13,6 +13,7 @@ import Categories from "./components/Categories";
 import Stores from "./components/Stores";
 import Profile from "./components/Profile";
 import ItemPage from "./components/ItemPage";
+import Checkout from "./components/Checkout";
 // import other components as needed
 // import AdminDashboard from "./components/AdminDashboard";
 // import VendorDashboard from "./components/VendorDashboard";
@@ -34,6 +35,7 @@ function App() {
             <Route path="/stores" element={<Stores />} />
             <Route path="/profile" element={<Profile/>} />
             <Route path="/product/:id" element={<ItemPage/>} />
+            <Route path="/checkout" element={<Checkout/>} />
             {/* <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/vendor" element={<VendorDashboard />} />
             <Route path="/deliveryPerson" element={<DeliveryDashboard />} /> */}

@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Cart = () => {
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
+  let navigate = useNavigate();
 
   const token = localStorage.getItem("token");
 
@@ -44,25 +47,19 @@ const Cart = () => {
     }
   };
 
-  // Place order
-  const placeOrder = async () => {
-    try {
-      await axios.post(
-        "/api/orders/place",
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      alert("Order placed successfully!");
-      setCart(null);
-    } catch (error) {
-      console.error("Order error:", error.response?.data || error.message);
-      alert(error.response?.data?.message || "Order failed");
+  const handleCheckout = () => {
+    if (!token) {
+      toast.info("Please log in to continue", {position:"top-center"});
+      navigate("/login", { state: { from: "/cart"} });
+      return;
     }
+
+    if (!cart || cart.items.length === 0) {
+      toast.info("Your cart is empty.", {position:"top-center"});
+      return;
+    }
+
+    navigate("/checkout");
   };
 
   useEffect(() => {
@@ -126,7 +123,7 @@ const Cart = () => {
       <h2>Total: ₹{totalAmount}</h2>
 
       <button
-        onClick={placeOrder}
+        onClick={handleCheckout}
         style={{
           backgroundColor: "#d92662",
           color: "white",
@@ -138,7 +135,7 @@ const Cart = () => {
           marginTop: "15px",
         }}
       >
-        Place Order
+        Proceed to Checkout
       </button>
     </div>
   );
