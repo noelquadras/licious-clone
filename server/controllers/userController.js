@@ -48,14 +48,5 @@ export const updateUserLocation = async (req, res) => {
 
     await user.save();
 
-    res.json({
-      message: "Location updated successfully",
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        location: user.location,
-        address: user.address,
-      },
-    });
+
 
