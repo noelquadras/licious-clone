@@ -1,4 +1,14 @@
+import User from "../models/userModel.js";
 
+// Get all users (Admin only - for management)
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find().select("-password");
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 // Get current user profile
 export const getCurrentUser = async (req, res) => {
@@ -27,5 +37,28 @@ export const updateUserLocation = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
+    user.location = {
+      type: "Point",
+      coordinates: [parseFloat(longitude), parseFloat(latitude)],
+    };
 
+    if (address) {
+      user.address = address;
+    }
 
+    await user.save();
+
+    res.json({
+      message: "Location updated successfully",
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        location: user.location,
+        address: user.address,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
