@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -6,6 +6,7 @@ import axios from "axios";
 const Checkout = () => {
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [address, setAddress] = useState("");
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
@@ -16,9 +17,29 @@ const Checkout = () => {
       return;
     }
 
+    const fetchUserProfile = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        const res = await axios.get("/api/users/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setAddress(res.data.user.address || "");
+      } catch (error) {
+        console.error(
+          "Profile fetch error:",
+          error.response?.data || error.message
+        );
+      }
+    };
+
     const fetchCart = async () => {
       try {
-        const res = await axios.get("api/cart", {
+        const res = await axios.get("/api/cart", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -32,11 +53,13 @@ const Checkout = () => {
 
         setCart(res.data.cart);
       } catch (err) {
-        toast.error("Failed to load Checkout", { positon: "top-center" });
+        toast.error("Failed to load Checkout", { position: "top-center" });
       } finally {
         setLoading(false);
       }
     };
+
+    fetchUserProfile();
     fetchCart();
   }, []);
 
@@ -62,11 +85,66 @@ const Checkout = () => {
   };
 
   if (loading) return <h2>Loading...</h2>;
+
   return (
-    <div>
+    <div style={{ maxWidth: "700px", margin: "30px auto" }}>
       <h1>Checkout</h1>
-      <h3>Total items: {cart.items.length}</h3>
-      <button onClick={placeOrder}>Place Order</button>
+
+      {/* Order summary */}
+      <div style={{ marginTop: "20px" }}>
+        <h2>Order Summary</h2>
+
+        {cart.items.map((item) => (
+          <div
+            key={item.vendorProduct._id}
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              borderBottom: "1px solid #ddd",
+              padding: "10px 0",
+            }}
+          >
+            <div>
+              <h4>{item.vendorProduct.baseProduct?.name || item.vendorProduct.name}</h4>
+              <p style={{ fontSize: "14px", color: "#555" }}>
+                {item.vendorProduct.vendor?.storeName}
+              </p>
+              <p>Qty: {item.quantity}</p>
+            </div>
+
+            <div>₹{item.vendorProduct.price * item.quantity}</div>
+          </div>
+        ))}
+      </div>
+
+      <hr />
+
+      <h2>
+        Total: ₹
+        {cart.items.reduce(
+          (sum, item) => sum + item.vendorProduct.price * item.quantity,
+          0
+        )}
+      </h2>
+
+      <p>Delivery Address: {address ? `📍 ${address}` : "📍 Location not set"}</p>
+      <p>type of payment</p>
+
+      <button
+        onClick={placeOrder}
+        style={{
+          marginTop: "20px",
+          padding: "12px 20px",
+          backgroundColor: "#d92662",
+          color: "white",
+          border: "none",
+          borderRadius: "6px",
+          cursor: "pointer",
+          fontSize: "16px",
+        }}
+      >
+        Place Order
+      </button>
     </div>
   );
 };

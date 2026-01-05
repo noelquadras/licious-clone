@@ -20,6 +20,7 @@ const Cart = () => {
       });
 
       setCart(res.data.cart);
+      console.log(res.data.cart);
     } catch (error) {
       console.error("Fetch cart error:", error.response?.data || error.message);
     } finally {
@@ -96,7 +97,7 @@ const Cart = () => {
           }}
         >
           <div>
-            <h3>{item.vendorProduct.baseProduct?.name}</h3>
+            <h3>{item.vendorProduct.baseProduct?.name || item.vendorProduct.name}</h3>
             <p>Vendor: {item.vendorProduct.vendor?.storeName}</p>
             <p>Price: ₹{item.vendorProduct.price}</p>
             <p>Quantity: {item.quantity}</p>

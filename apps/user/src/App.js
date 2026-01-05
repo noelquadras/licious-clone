@@ -14,10 +14,6 @@ import Stores from "./components/Stores";
 import Profile from "./components/Profile";
 import ItemPage from "./components/ItemPage";
 import Checkout from "./components/Checkout";
-// import other components as needed
-// import AdminDashboard from "./components/AdminDashboard";
-// import VendorDashboard from "./components/VendorDashboard";
-// import DeliveryDashboard from "./components/DeliveryDashboard";
 
 function App() {
   return (
@@ -36,9 +32,6 @@ function App() {
             <Route path="/profile" element={<Profile/>} />
             <Route path="/product/:id" element={<ItemPage/>} />
             <Route path="/checkout" element={<Checkout/>} />
-            {/* <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/vendor" element={<VendorDashboard />} />
-            <Route path="/deliveryPerson" element={<DeliveryDashboard />} /> */}
           </Routes>
         </div>
       </div>
