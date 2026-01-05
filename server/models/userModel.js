@@ -40,6 +40,43 @@ const userSchema = new mongoose.Schema(
         default: [0, 0],
       },
     },
+    addresses: [
+      {
+        address: {
+          type: String,
+          required: [true, "Address is required"],
+        },
+        flatNo: {
+          type: String,
+          required: [true, "Flat No is required"],
+        },
+        landmark: {
+          type: String,
+          required: [true, "Landmark is required"],
+        },
+        city: {
+          type: String,
+          required: [true, "City is required"],
+        },
+        label: {
+          type: String,
+          required: [true, "Label is required"],
+        },
+        location: {
+          type: {
+            type: String,
+            enum: ["Point"],
+            default: "Point",
+            required: true,
+          },
+          coordinates: {
+            type: [Number], // [longitude, latitude]
+            default: [0, 0],
+            required: true,
+          },
+        },
+      },
+    ],
   },
   { timestamps: true }
 );
