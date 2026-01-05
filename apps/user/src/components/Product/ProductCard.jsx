@@ -1,19 +1,27 @@
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import styles from "./ProductCard.module.css";
+import QuantityButton from "./QuantityButton";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, quantity }) => {
+  const navigate = useNavigate();
+
   const addToCart = async (vendorProductId) => {
     try {
       const token = localStorage.getItem("token");
 
       if (!token) {
-        toast.info("Please log in to add items to your cart.");
-        window.location.href = "/login";
+        toast.info("Please log in to add items to your cart.", {
+          position: "top-center",
+        });
+        navigate("/login");
         return;
       }
 
-      const res = await axios.post(
+      await axios.post(
         "/api/cart/add",
         {
           vendorProductId,
@@ -25,53 +33,50 @@ const ProductCard = ({ product }) => {
           },
         }
       );
-      toast.info("Item added to cart!", {position: "top-center", closeOnClick: true});
-      window.dispatchEvent(new Event('cartUpdated'));
+
+      toast.info("Item added to cart!", {
+        position: "top-center",
+        closeOnClick: true,
+      });
+
+      window.dispatchEvent(new Event("cartUpdated"));
     } catch (error) {
-      console.error(
-        "Add to cart error:",
-        error.response?.data || error.message
-      );
-      alert(error.response?.data?.message || "Failed to add item");
+      toast.error(error.response?.data?.message || "Failed to add item");
     }
   };
 
   return (
-    <div className="product-card">
+    <div className={styles.card}>
       <Link
         to={`/product/${product._id}`}
         style={{ textDecoration: "none", color: "inherit" }}
       >
-        {product.images && product.images[0] && (
-          <img
-            src={product.images[0] || product.images}
-            alt={product.name}
-            style={{ width: "100%", height: "150px", objectFit: "cover" }}
-          />
-        )}
-        <h3>{product.name}</h3>
-        <p className="product-description">{product.description}</p>
-
-        <strong style={{ fontWeight: "bold", color: "#d92662" }}>
-          ₹{product.price || product.basePrice || "N/A"}
-        </strong>
+        <div className={styles.imageWrapper}>
+          {product.images?.[0] && (
+            <img
+              src={product.images[0]}
+              alt={product.name}
+              className={styles.image}
+            />
+          )}
+        </div>
       </Link>
-
-      <button
-        onClick={() => addToCart(product._id)}
-        style={{
-          backgroundColor: "#d92662",
-          color: "white",
-          border: "none",
-          padding: "10px",
-          borderRadius: "4px",
-          cursor: "pointer",
-          width: "100%",
-          marginTop: "10px",
+      <QuantityButton
+        qty={quantity}
+        onAdd={(qty) => addToCart(product._id)}
+        onRemove={(qty) => {
+          // later you can call remove-from-cart API
+          // for now, just keep UI correct
         }}
-      >
-        Add to Cart
-      </button>
+      />
+
+      <div className={styles.content}>
+        <h3 className={styles.name}>{product.name}</h3>
+        <p className={styles.description}>{product.description}</p>
+        <div className={styles.price}>
+          ₹{product.price || product.basePrice || "N/A"}
+        </div>
+      </div>
     </div>
   );
 };

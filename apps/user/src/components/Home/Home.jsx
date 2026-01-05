@@ -6,18 +6,49 @@ import Categories from "../Categories/Categories";
 import ProductCard from "../Product/ProductCard";
 
 const Home = () => {
+  const token = localStorage.getItem("token");
+  const [loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
   const [username, setUsername] = useState("");
+  const [cart, setCart] = useState([]);
 
+  const getProductQuantity = (productId) => {
+    if (!cart?.items) return 0;
+
+    const cartItem = cart.items.find(
+      (item) => item.vendorProduct._id === productId
+    );
+
+    return cartItem ? cartItem.quantity : 0;
+  };
+
+  const fetchCart = async () => {
+    try {
+      const res = await axios.get("/api/cart", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setCart(res.data.cart);
+    } catch (error) {
+      console.error("Fetch cart error:", error.response?.data || error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     axios
       .get("/api/products/vendor")
       .then((response) => {
-        // console.log("API Response:", response.data);
         setItems(response.data.vendorProducts || response.data);
       })
       .catch((error) => console.error("Error fetching products:", error));
+  }, []);
+
+  useEffect(() => {
+    fetchCart();
   }, []);
 
   useEffect(() => {
@@ -25,6 +56,22 @@ const Home = () => {
     const storedUsername = localStorage.getItem("username");
     setUsername(storedUsername);
   }, []);
+
+  useEffect(() => {
+    const handleCartUpdate = () => {
+      fetchCart();
+    };
+
+    window.addEventListener("cartUpdated", handleCartUpdate);
+
+    return () => {
+      window.removeEventListener("cartUpdated", handleCartUpdate);
+    };
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
@@ -47,7 +94,10 @@ const Home = () => {
               textAlign: "center",
             }}
           >
-            <ProductCard product={item} />
+            <ProductCard
+              product={item}
+              quantity={getProductQuantity(item._id)}
+            />
           </div>
         ))}
       </div>
