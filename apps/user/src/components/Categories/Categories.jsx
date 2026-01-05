@@ -1,13 +1,14 @@
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useState, useEffect } from "react";
 import ProductCard from "../Product/ProductCard";
 import { getProductQuantity } from "../../utils/cartUtils";
+import styles from "./Categories.module.css";
 
 // Category Button Component
 const CategoryButton = ({ category, isSelected, onClick }) => {
   return (
     <button
-      className={`category-button ${isSelected ? "selected" : ""}`}
+      className={`${styles.categoryButton} ${isSelected ? styles.categoryButtonSelected : ""}`}
       onClick={onClick}
     >
       {category.name}
@@ -26,13 +27,10 @@ const Categories = () => {
   const [loading, setLoading] = useState(true);
 
   const fetchCart = async () => {
-    if(!token) return;
-
+    if (!token) return;
     try {
       const res = await axios.get("/api/cart", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
       setCart(res.data.cart);
     } catch (error) {
@@ -42,11 +40,9 @@ const Categories = () => {
 
   const handleCategoryClick = (categoryName) => {
     setSelectedCategory(categoryName);
-
     if (categoryName === "all") {
       setCategoryItems(allProducts);
     } else {
-      // Filter products by selected category
       const filteredItems = allProducts.filter(
         (item) => item.category === categoryName
       );
@@ -55,15 +51,9 @@ const Categories = () => {
   };
 
   useEffect(() => {
-    const handleCartUpdate = () => {
-      fetchCart();
-    };
-
+    const handleCartUpdate = () => fetchCart();
     window.addEventListener("cartUpdated", handleCartUpdate);
-
-    return () => {
-      window.removeEventListener("cartUpdated", handleCartUpdate);
-    };
+    return () => window.removeEventListener("cartUpdated", handleCartUpdate);
   }, []);
 
   useEffect(() => {
@@ -78,20 +68,16 @@ const Categories = () => {
         const products = res.data.vendorProducts;
         setAllProducts(products);
 
-        // Get unique categories
         const uniqueCategories = [
           ...new Set(products.map((item) => item.category)),
         ];
 
-        // Store categories as objects with name
         const categoryObjects = uniqueCategories.map((category, index) => ({
           id: index,
           name: category,
         }));
 
         setCategories(categoryObjects);
-
-        // Initially show all products
         setCategoryItems(products);
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -99,23 +85,22 @@ const Categories = () => {
         setLoading(false);
       }
     };
-
     fetchCategories();
   }, []);
 
   if (loading) {
-    return <div className="loading">Loading categories...</div>;
+    return <div className={styles.loading}>Loading categories...</div>;
   }
 
   return (
-    <div className="categories-container">
+    <div className={styles.categoriesContainer}>
       {/* Categories Sidebar */}
-      <div className="categories-sidebar">
+      <div className={styles.categoriesSidebar}>
         <h2>Categories</h2>
-        <div className="categories-list">
+        <div className={styles.categoriesList}>
           <CategoryButton
             category={{ name: "All Products" }}
-            isSelected={!selectedCategory}
+            isSelected={!selectedCategory || selectedCategory === "all"}
             onClick={() => handleCategoryClick("all")}
           />
           {categories.map((category) => (
@@ -130,7 +115,7 @@ const Categories = () => {
       </div>
 
       {/* Products Display */}
-      <div className="products-display">
+      <div className={styles.productsDisplay}>
         <h2>
           {selectedCategory && selectedCategory !== "all"
             ? `Products in ${selectedCategory} (${categoryItems.length})`
@@ -138,9 +123,9 @@ const Categories = () => {
         </h2>
 
         {categoryItems.length === 0 ? (
-          <p className="no-products">No products found in this category.</p>
+          <p className={styles.noProducts}>No products found in this category.</p>
         ) : (
-          <div className="products-grid">
+          <div className={styles.productsGrid}>
             {categoryItems.map((item) => (
               <div key={item._id}>
                 <ProductCard
@@ -155,145 +140,5 @@ const Categories = () => {
     </div>
   );
 };
-
-// Add some CSS (either in a separate file or in a style tag)
-const styles = `
-  .categories-container {
-    display: flex;
-    gap: 2rem;
-    padding: 1rem;
-  }
-  
-  .categories-sidebar {
-    min-width: 200px;
-  }
-  
-  .categories-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .category-button {
-    text-align: left;
-    padding: 0.75rem 1rem;
-    background-color: #f8f9fa;
-    color: #212529;
-    border: 1px solid #dee2e6;
-    cursor: pointer;
-    border-radius: 6px;
-    transition: all 0.2s;
-    font-size: 1rem;
-  }
-  
-  .category-button:hover {
-    background-color: #e9ecef;
-    transform: translateY(-1px);
-  }
-  
-  .category-button.selected {
-    background-color: #007bff;
-    color: white;
-    border-color: #007bff;
-  }
-  
-  .products-display {
-    flex: 1;
-  }
-  
-  .products-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.5rem;
-  }
-  
-  .product-card {
-    border: 1px solid #dee2e6;
-    border-radius: 10px;
-    padding: 1.25rem;
-    background-color: white;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  
-  .product-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  }
-  
-  .product-card h3 {
-    margin-top: 0;
-    margin-bottom: 0.5rem;
-    color: #212529;
-  }
-  
-  .product-category {
-    color: #6c757d;
-    font-size: 0.9rem;
-    margin-bottom: 0.75rem;
-  }
-  
-  .product-description {
-    color: #495057;
-    margin-bottom: 1rem;
-    line-height: 1.5;
-  }
-  
-  .product-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.5rem;
-  }
-  
-  .product-price {
-    color: #007bff;
-    font-size: 1.25rem;
-  }
-  
-  .product-status {
-    color: white;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    font-size: 0.875rem;
-    font-weight: 500;
-  }
-  
-  .product-status.active {
-    background-color: #28a745;
-  }
-  
-  .product-status.inactive {
-    background-color: #dc3545;
-  }
-  
-  .product-stock {
-    margin-top: 0.5rem;
-    font-size: 0.9rem;
-    color: #6c757d;
-  }
-  
-  .no-products {
-    color: #6c757d;
-    font-style: italic;
-    padding: 2rem;
-    text-align: center;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-  }
-  
-  .loading {
-    padding: 2rem;
-    text-align: center;
-    color: #6c757d;
-  }
-`;
-
-// Add the styles to the document head
-if (typeof document !== "undefined") {
-  const styleSheet = document.createElement("style");
-  styleSheet.innerText = styles;
-  document.head.appendChild(styleSheet);
-}
 
 export default Categories;

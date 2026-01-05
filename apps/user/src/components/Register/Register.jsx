@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import styles from './Register.module.css';
 
 const Register = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
     phone: '',
     address: '',
-    latitude: 12.9716, // Hardcoded for now (Bangalore)
+    latitude: 12.9716, // Default to Bangalore
     longitude: 77.5946 
   });
 
@@ -20,35 +23,76 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
-      // POST request to your backend
       const res = await axios.post('/api/auth/user/register', formData);
-      console.log('Registration Success:', res.data);
-      alert('Registration Successful! Please Login.');
-      navigate('/login'); // Redirect to login page
+      toast.success('Registration Successful! Please Login.', { position: "top-center" });
+      navigate('/login');
     } catch (error) {
       console.error('Registration Error:', error.response?.data || error.message);
-      alert('Registration Failed: ' + (error.response?.data?.message || 'Server Error'));
+      const errorMsg = error.response?.data?.message || 'Registration Failed';
+      toast.error(errorMsg, { position: "top-center" });
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Simple CSS for the form
-  const inputStyle = { display: 'block', width: '100%', padding: '10px', marginBottom: '10px', borderRadius: '5px', border: '1px solid #ddd' };
-
   return (
-    <div style={{ maxWidth: '400px', margin: '50px auto', padding: '20px', boxShadow: '0 0 10px rgba(0,0,0,0.1)' }}>
-      <h2 style={{ textAlign: 'center', color: '#d92662' }}>Register</h2>
+    <div className={styles.registerContainer}>
+      <h2 className={styles.title}>Create Account</h2>
       <form onSubmit={handleSubmit}>
-        <input type="text" name="name" placeholder="Full Name" onChange={handleChange} style={inputStyle} required />
-        <input type="email" name="email" placeholder="Email" onChange={handleChange} style={inputStyle} required />
-        <input type="password" name="password" placeholder="Password" onChange={handleChange} style={inputStyle} required />
-        <input type="text" name="phone" placeholder="Phone Number" onChange={handleChange} style={inputStyle} required />
-        <textarea name="address" placeholder="Address" onChange={handleChange} style={inputStyle} required />
+        <input 
+          type="text" 
+          name="name" 
+          placeholder="Full Name" 
+          onChange={handleChange} 
+          className={styles.inputField} 
+          required 
+        />
+        <input 
+          type="email" 
+          name="email" 
+          placeholder="Email Address" 
+          onChange={handleChange} 
+          className={styles.inputField} 
+          required 
+        />
+        <input 
+          type="password" 
+          name="password" 
+          placeholder="Password" 
+          onChange={handleChange} 
+          className={styles.inputField} 
+          required 
+        />
+        <input 
+          type="text" 
+          name="phone" 
+          placeholder="Phone Number" 
+          onChange={handleChange} 
+          className={styles.inputField} 
+          required 
+        />
+        <textarea 
+          name="address" 
+          placeholder="Full Delivery Address" 
+          onChange={handleChange} 
+          className={`${styles.inputField} styles.textArea`} 
+          required 
+        />
         
-        <button type="submit" style={{ width: '100%', padding: '10px', backgroundColor: '#d92662', color: 'white', border: 'none', cursor: 'pointer' }}>
-          Create Account
+        <button 
+          type="submit" 
+          className={styles.registerButton} 
+          disabled={loading}
+        >
+          {loading ? 'Creating Account...' : 'Create Account'}
         </button>
       </form>
+
+      <p className={styles.footerText}>
+        Already have an account? <Link to="/login">Login here</Link>
+      </p>
     </div>
   );
 };

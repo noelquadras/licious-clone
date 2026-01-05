@@ -1,0 +1,47 @@
+.container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.welcomeText {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.sectionTitle {
+  font-size: 1.5rem;
+  margin: 20px 0;
+  color: #444;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+}
+
+.productGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 25px;
+  margin-bottom: 40px;
+}
+
+.cardWrapper {
+  border: 1px solid #eee;
+  padding: 15px;
+  border-radius: 12px;
+  text-align: center;
+  transition: box-shadow 0.3s ease;
+  background-color: #fff;
+}
+
+.cardWrapper:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+  font-size: 1.2rem;
+  color: #666;
+}

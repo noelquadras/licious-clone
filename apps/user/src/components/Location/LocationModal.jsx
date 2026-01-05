@@ -1,16 +1,15 @@
 import React, { useState } from "react";
 import axios from "axios";
 import LocationSearchInput from "./LocationSearchInput";
+import styles from "./LocationModal.module.css";
 
 const LocationModal = ({ onClose, onSave }) => {
   const [loading, setLoading] = useState(false);
-
   const token = localStorage.getItem("token");
 
-  // Use GPS
   const useCurrentLocation = () => {
     if (!navigator.geolocation) {
-      alert("Geolocation not supported");
+      alert("Geolocation not supported by your browser");
       return;
     }
 
@@ -38,75 +37,63 @@ const LocationModal = ({ onClose, onSave }) => {
           onSave(res.data.user.address);
           onClose();
         } catch (err) {
-          alert("Failed to save location");
+          console.error(err);
+          alert("Failed to save current location");
         } finally {
           setLoading(false);
         }
       },
-      () => {
-        alert("Location permission denied");
+      (error) => {
+        alert("Location permission denied or unavailable");
         setLoading(false);
       }
     );
   };
 
-  return (
-    <div style={overlayStyle}>
-      <div style={modalStyle}>
-        <h3>Select Delivery Location</h3>
+  const handleManualSelect = async ({ address, latitude, longitude }) => {
+    try {
+      const res = await axios.put(
+        "/api/users/location",
+        { address, latitude, longitude },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-        <button onClick={useCurrentLocation} disabled={loading}>
-          📍 Use current location
+      onSave(res.data.user.address);
+      onClose();
+    } catch (error) {
+      console.error(error);
+      alert("Failed to save selected location");
+    }
+  };
+
+  return (
+    <div className={styles.overlay} onClick={onClose}>
+      {/* stopPropagation prevents clicking inside the modal from closing it */}
+      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+        <h3 className={styles.title}>Select Delivery Location</h3>
+
+        <button 
+          className={styles.gpsButton} 
+          onClick={useCurrentLocation} 
+          disabled={loading}
+        >
+          {loading ? "Finding you..." : "📍 Use current location"}
         </button>
 
-        <hr />
+        <hr className={styles.divider} />
 
-        <LocationSearchInput
-          onSelect={async ({ address, latitude, longitude }) => {
-            try {
-              const token = localStorage.getItem("token");
+        <LocationSearchInput onSelect={handleManualSelect} />
 
-              const res = await axios.put(
-                "/api/users/location",
-                {
-                  address,
-                  latitude,
-                  longitude,
-                },
-                {
-                  headers: {
-                    Authorization: `Bearer ${token}`,
-                  },
-                }
-              );
-
-              onSave(res.data.user.address);
-              onClose();
-            } catch (error) {
-              alert("Failed to save location");
-            }
-          }}
-        />
-        <button onClick={onClose}>Close</button>
+        <button className={styles.closeButton} onClick={onClose}>
+          Cancel and Close
+        </button>
       </div>
     </div>
   );
-};
-
-const overlayStyle = {
-  position: "fixed",
-  inset: 0,
-  background: "rgba(0,0,0,0.4)",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-};
-
-const modalStyle = {
-  background: "#fff",
-  padding: "20px",
-  borderRadius: "8px",
-  width: "300px",
 };
 
 export default LocationModal;

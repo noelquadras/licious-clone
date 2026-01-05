@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import styles from "./LocationSearchInput.module.css";
 
 const LocationSearchInput = ({ onSelect }) => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
 
   useEffect(() => {
+    // Only search if query is 3 characters or more
     if (!query || query.length < 3) {
       setResults([]);
       return;
@@ -24,68 +26,53 @@ const LocationSearchInput = ({ onSelect }) => {
             },
           }
         );
-
         setResults(res.data);
       } catch (error) {
         console.error("Location search error", error);
       }
     };
 
+    // Debounce to prevent API spamming
     const debounce = setTimeout(fetchLocations, 400);
     return () => clearTimeout(debounce);
   }, [query]);
 
+  const handleItemClick = (place) => {
+    onSelect({
+      address: place.display_name,
+      latitude: place.lat,
+      longitude: place.lon,
+    });
+    setQuery(""); // Clear query after selection
+    setResults([]); // Hide results
+  };
+
   return (
-    <div style={{ position: "relative" }}>
+    <div className={styles.searchContainer}>
       <input
         type="text"
-        placeholder="Search for area, street, city"
+        placeholder="Search for area, street, city..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        style={{ width: "100%", padding: "8px" }}
+        className={styles.inputField}
       />
 
       {results.length > 0 && (
-        <ul style={listStyle}>
+        <ul className={styles.resultsList}>
           {results.map((place) => (
             <li
               key={place.place_id}
-              style={itemStyle}
-              onClick={() =>
-                onSelect({
-                  address: place.display_name,
-                  latitude: place.lat,
-                  longitude: place.lon,
-                })
-              }
+              className={styles.resultItem}
+              onClick={() => handleItemClick(place)}
             >
-              📍 {place.display_name}
+              <span>📍</span>
+              <span>{place.display_name}</span>
             </li>
           ))}
         </ul>
       )}
     </div>
   );
-};
-
-const listStyle = {
-  position: "absolute",
-  top: "100%",
-  left: 0,
-  right: 0,
-  background: "#fff",
-  border: "1px solid #ddd",
-  borderRadius: "4px",
-  listStyle: "none",
-  padding: 0,
-  margin: 0,
-  zIndex: 10,
-};
-
-const itemStyle = {
-  padding: "8px",
-  cursor: "pointer",
-  borderBottom: "1px solid #eee",
 };
 
 export default LocationSearchInput;
