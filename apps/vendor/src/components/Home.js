@@ -9,29 +9,32 @@ const Home = () => {
   const [items, setItems] = useState([]);
   const [username, setUsername] = useState("");
 
-  const addToCart = async (vendorProductId) => {
-  try {
-    const token = localStorage.getItem("token");
+  // const addToCart = async (vendorProductId) => {
+  //   try {
+  //     const token = localStorage.getItem("token");
 
-    const res = await axios.post(
-      "/api/cart/add",
-      {
-        vendorProductId,
-        quantity: 1,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    alert("Item added to cart!");
-  } catch (error) {
-    console.error("Add to cart error:", error.response?.data || error.message);
-    alert(error.response?.data?.message || "Failed to add item");
-  }
-};
-  
+  //     const res = await axios.post(
+  //       "/api/cart/add",
+  //       {
+  //         vendorProductId,
+  //         quantity: 1,
+  //       },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+  //     alert("Item added to cart!");
+  //   } catch (error) {
+  //     console.error(
+  //       "Add to cart error:",
+  //       error.response?.data || error.message
+  //     );
+  //     alert(error.response?.data?.message || "Failed to add item");
+  //   }
+  // };
+
   useEffect(() => {
     axios
       .get("/api/products/vendor")
@@ -43,14 +46,14 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    const storedUsername = localStorage.getItem("username");
+    const storedUsername = localStorage.getItem("vendorUsername");
     setUsername(storedUsername);
   }, []);
 
   return (
     <div>
       <h1>Hi, {username ? username : "Guest"} 👋</h1>
-      <h2>Fresh Cuts (Base Products)</h2>
+      {/* <h2>Fresh Cuts (Base Products)</h2>
       <div
         style={{
           display: "grid",
@@ -72,7 +75,7 @@ const Home = () => {
           </div>
         ))}
       </div>
-      <Categories />
+      <Categories /> */}
     </div>
   );
 };

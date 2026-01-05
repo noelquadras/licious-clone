@@ -19,17 +19,21 @@ const Login = () => {
   const handleSubmit = async (e) => {
   e.preventDefault();
   try {
-    const res = await axios.post('/api/auth/user/login', formData);
+    const res = await axios.post('/api/auth/vendor/login', formData);
 
     const token = res.data.token || res.data.accessToken;
-    const user = res.data.user;
+    const vendor = res.data.vendor;
 
-    localStorage.setItem('token', token);
-    localStorage.setItem('username', user.name);
-    localStorage.setItem('email', user.email);
-    localStorage.setItem('phone', user.phone);
+    console.log('Login Response:', res.data);
+
+    localStorage.setItem('vendorToken', token);
+    localStorage.setItem('vendorUsername', vendor.ownerName);
+    localStorage.setItem('vendorEmail', vendor.email);
+    localStorage.setItem('vendrPhone', vendor.phone);
 
     const userType = getUserTypeFromToken();
+
+    //FIX: userType is null!!
 
     alert('Login Successful!');
 

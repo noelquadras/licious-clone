@@ -1,36 +1,40 @@
-import React, { useEffect, useState } from "react";
+//Navbar.js
+
+//FIX: ADD LOGOUT FUNCTIONALITY
+
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import LocationModal from "./LocationModal";
 
 const Navbar = () => {
   const [address, setAddress] = useState("");
-  const isLoggedin = Boolean(localStorage.getItem("token"));
+  const isLoggedin = Boolean(localStorage.getItem("vendorToken"));
   const [showLocationModal, setShowLocationModal] = useState(false);
 
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) return;
+  // useEffect(() => {
+  //   const fetchUserProfile = async () => {
+  //     try {
+  //       const token = localStorage.getItem("vendorToken");
+  //       if (!token) return;
 
-        const res = await axios.get("/api/users/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+  //       const res = await axios.get("/api/users/me", {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       });
 
-        setAddress(res.data.user.address || "");
-      } catch (error) {
-        console.error(
-          "Profile fetch error:",
-          error.response?.data || error.message
-        );
-      }
-    };
+  //       setAddress(res.data.user.address || "");
+  //     } catch (error) {
+  //       console.error(
+  //         "Profile fetch error:",
+  //         error.response?.data || error.message
+  //       );
+  //     }
+  //   };
 
-    fetchUserProfile();
-  }, []);
+  //   fetchUserProfile();
+  // }, []);
 
   const navStyle = {
     display: "flex",
