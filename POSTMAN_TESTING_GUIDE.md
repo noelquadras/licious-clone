@@ -127,6 +127,31 @@
       "address": "New Address, Indiranagar"
     }
     ```
+- **Add Address**
+  - **POST** `http://localhost:5000/api/users/addresses`
+  - **Body (JSON)**:
+    ```json
+    {
+      "address": "Flat 101, Galaxy Apartments",
+      "flatNo": "101",
+      "landmark": "Near Apollo Pharmacy",
+      "city": "Bangalore",
+      "label": "Home",
+      "latitude": 12.9716,
+      "longitude": 77.5946
+    }
+    ```
+- **Update Address**
+  - **PUT** `http://localhost:5000/api/users/addresses/:id`
+  - **Body (JSON)**:
+    ```json
+    {
+      "label": "Work",
+      "flatNo": "202"
+    }
+    ```
+- **Delete Address**
+  - **DELETE** `http://localhost:5000/api/users/addresses/:id`
 
 ---
 
