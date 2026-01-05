@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-import ProductCard from "./ProductCard";
+import ProductCard from "../Product/ProductCard";
 
 // Category Button Component
 const CategoryButton = ({ category, isSelected, onClick }) => {

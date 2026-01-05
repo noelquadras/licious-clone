@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import LocationModal from "./LocationModal";
+import LocationModal from "../Location/LocationModal";
 
 const Navbar = () => {
   const [address, setAddress] = useState("");
