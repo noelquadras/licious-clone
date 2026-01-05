@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import LocationModal from "../Location/LocationModal";
 import styles from "./Navbar.module.css";
+import { User2, Store, Layers, MapPin } from "lucide-react";
 
 const Navbar = () => {
   const [address, setAddress] = useState("");
@@ -76,7 +77,8 @@ const Navbar = () => {
             onClick={() => setShowLocationModal(true)}
             className={styles.locationBtn}
           >
-            {address ? `📍 ${address}` : "📍 Set Location"}
+            <MapPin />
+            {address ? `${address}` : "Set Location"}
           </button>
         </div>
 
@@ -91,8 +93,8 @@ const Navbar = () => {
 
         {/* Navigation Links */}
         <div className={styles.navLinks}>
-          <Link to="/categories" className={styles.link}>Categories</Link>
-          <Link to="/stores" className={styles.link}>Stores</Link>
+          <Link to="/categories" className={styles.link}><Layers />Categories</Link>
+          <Link to="/stores" className={styles.link}><Store />Stores</Link>
 
           <div className={styles.profileWrapper}>
             {isLoggedin ? (
@@ -104,7 +106,7 @@ const Navbar = () => {
                     setShowProfileMenu(!showProfileMenu);
                   }}
                 >
-                  Profile
+                  <User2 />Profile
                 </button>
 
                 {showProfileMenu && (
