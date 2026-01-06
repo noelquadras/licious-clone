@@ -5,7 +5,7 @@ import LocationModal from "../Location/LocationModal";
 import styles from "./Navbar.module.css";
 import { User2, Store, Layers, MapPin, ShoppingCart } from "lucide-react";
 
-const Navbar = ({ onCartClick }) => {
+const Navbar = ({ onCartClick, onLoginClick }) => {
   const [address, setAddress] = useState("");
   const isLoggedin = Boolean(localStorage.getItem("token"));
   const [showLocationModal, setShowLocationModal] = useState(false);
@@ -69,7 +69,7 @@ const Navbar = ({ onCartClick }) => {
   const handleLogout = () => {
     localStorage.clear(); // Clear all user data
     setShowProfileMenu(false);
-    navigate("/login");
+    navigate("/");
   };
 
   return (
@@ -129,7 +129,7 @@ const Navbar = ({ onCartClick }) => {
                 )}
               </>
             ) : (
-              <Link to="/login" className={styles.link}>Login</Link>
+              <button onClick={onLoginClick} className={styles.link}>Login</button>
             )}
           </div>
 

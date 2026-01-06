@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { getUserTypeFromToken } from "../../utils/auth.js";
 import styles from "./Login.module.css";
 
-const Login = () => {
+const Login = ({ isSidebar = false }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -58,7 +58,7 @@ const Login = () => {
   };
 
   return (
-    <div className={styles.loginContainer}>
+    <div className={isSidebar ? styles.sidebarContainer : styles.container}>
       <h2 className={styles.title}>Login</h2>
       <form onSubmit={handleSubmit}>
         <input 
