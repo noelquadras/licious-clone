@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import styles from "./Cart.module.css";
 
-const Cart = () => {
+const Cart = ({ isSidebar = false }) => {
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
   let navigate = useNavigate();
@@ -76,7 +76,7 @@ const Cart = () => {
   );
 
   return (
-    <div className={styles.container}>
+    <div className={isSidebar ? styles.sidebarContainer : styles.container}>
       <h1>My Cart</h1>
 
       {cart.items.map((item) => (

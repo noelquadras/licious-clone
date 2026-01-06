@@ -5,7 +5,7 @@ import LocationModal from "../Location/LocationModal";
 import styles from "./Navbar.module.css";
 import { User2, Store, Layers, MapPin, ShoppingCart } from "lucide-react";
 
-const Navbar = () => {
+const Navbar = ({ onCartClick }) => {
   const [address, setAddress] = useState("");
   const isLoggedin = Boolean(localStorage.getItem("token"));
   const [showLocationModal, setShowLocationModal] = useState(false);
@@ -133,10 +133,10 @@ const Navbar = () => {
             )}
           </div>
 
-          <Link to="/cart" className={`${styles.link} ${styles.cartLink}`}>
+          <button onClick={onCartClick} className={`${styles.link} ${styles.cartLink}`}>
             <ShoppingCart />
             {cart.items.length > 0 ? `${totalQuantity} Items ₹${totalAmount}` : "Cart"}
-          </Link>
+          </button>
         </div>
       </nav>
 
