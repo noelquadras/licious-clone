@@ -18,23 +18,23 @@
 }
 
 .productGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 25px;
-  margin-bottom: 40px;
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 10px 0;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.productGrid::-webkit-scrollbar {
+  display: none;
 }
 
 .cardWrapper {
-  border: 1px solid #eee;
-  padding: 15px;
-  border-radius: 12px;
-  text-align: center;
-  transition: box-shadow 0.3s ease;
-  background-color: #fff;
-}
-
-.cardWrapper:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  flex: 0 0 280px;
+  scroll-snap-align: start;
+  transition: transform 0.3s ease;
 }
 
 .loading {

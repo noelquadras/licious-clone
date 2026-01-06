@@ -104,15 +104,15 @@ const Navbar = ({ onCartClick, onLoginClick }) => {
           <div className={styles.profileWrapper}>
             {isLoggedin ? (
               <>
-                <button
-                  className={styles.profileBtn}
+                <Link
+                  className={styles.link}
                   onClick={(e) => {
                     e.stopPropagation();
                     setShowProfileMenu(!showProfileMenu);
                   }}
                 >
                   <User2 />Profile
-                </button>
+                </Link>
 
                 {showProfileMenu && (
                   <div className={styles.dropdown} onClick={(e) => e.stopPropagation()}>
