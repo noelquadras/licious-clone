@@ -38,7 +38,7 @@ const LoginSidebar = ({ isOpen, onClose }) => {
           </button>
         </div>
 
-        <Login isSidebar />
+        <Login isSidebar onSuccess={onClose} />
       </div>
     </>
   );

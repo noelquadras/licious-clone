@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { getUserTypeFromToken } from "../../utils/auth.js";
 import styles from "./Login.module.css";
 
-const Login = ({ isSidebar = false }) => {
+const Login = ({ isSidebar = false, onSuccess}) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -48,6 +48,8 @@ const Login = ({ isSidebar = false }) => {
         default:
           navigate("/");
       }
+
+      onSuccess();
 
     } catch (error) {
       console.error('Login Error:', error.response?.data || error.message);
