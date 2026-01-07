@@ -22,6 +22,8 @@
   border-radius: 6px;
   padding-top: 5px;
   padding-bottom: 5px;
+  border: #d92662;
+  background-color: #fff;
   cursor: pointer;
 }
 

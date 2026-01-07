@@ -1,20 +1,22 @@
 .card {
+  position: relative;
   height: 350px;
   max-width: 300px;
   width: 100%;
   border-radius: 12px;
-  overflow: hidden;
+  overflow: visible;
   background-color: #fff;
 }
 
 .imageWrapper {
-  width: 100;
+  position: relative;
+  width: 100%;
   height: 160px;
   background-color: #f7f7f7;
-  overflow: hidden;
 }
 
 .image {
+  border-radius: 12px;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -30,7 +32,7 @@
 .name {
   display: -webkit-box;
   -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;  
+  -webkit-box-orient: vertical;
   overflow: hidden;
   font-size: 16px;
   font-weight: 600;
@@ -41,7 +43,7 @@
 .description {
   display: -webkit-box;
   -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;  
+  -webkit-box-orient: vertical;
   overflow: hidden;
   font-size: 14px;
   color: #666;
@@ -67,4 +69,12 @@
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
+}
+
+.quantityBtn {
+  position: absolute;
+  bottom: -12px;
+  right: 12px;
+  z-index: 2;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }

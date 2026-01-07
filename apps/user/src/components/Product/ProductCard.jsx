@@ -77,7 +77,7 @@ const ProductCard = ({ product, quantity }) => {
         position: "top-center",
         closeOnClick: true,
       });
-      
+
       window.dispatchEvent(new Event("cartUpdated"));
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to add item");
@@ -88,11 +88,11 @@ const ProductCard = ({ product, quantity }) => {
 
   return (
     <div className={styles.card}>
-      <Link
-        to={`/product/${product._id}`}
-        style={{ textDecoration: "none", color: "inherit" }}
-      >
         <div className={styles.imageWrapper}>
+          <Link
+            to={`/product/${product._id}`}
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
           {product.images?.[0] && (
             <img
               src={product.images[0]}
@@ -100,14 +100,16 @@ const ProductCard = ({ product, quantity }) => {
               className={styles.image}
             />
           )}
+            </Link>
+          <div className={styles.quantityBtn}>
+            <QuantityButton
+              qty={quantity}
+              loading={updating}
+              onAdd={(qty) => addToCart(product._id)}
+              onRemove={(qty) => removeFromCart(product._id)}
+            />
+          </div>
         </div>
-      </Link>
-      <QuantityButton
-        qty={quantity}
-        loading={updating}
-        onAdd={(qty) => addToCart(product._id)}
-        onRemove={(qty) => removeFromCart(product._id)}
-      />
 
       <div className={styles.content}>
         <h3 className={styles.name}>{product.name}</h3>
