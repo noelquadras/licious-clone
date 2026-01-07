@@ -1,18 +1,120 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import styles from "./ItemPage.module.css";
+import { toast } from "react-toastify";
+import QuantityButton from "../Product/QuantityButton";
+import { getProductQuantity } from "../../utils/cartUtils";
 
 const ItemPage = () => {
+  const token = localStorage.getItem("token");
+  const navigate = useNavigate();
   const { id: productId } = useParams();
   const [productDetails, setProductDetails] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [updating, setUpdating] = useState(false);
+  const [cart, setCart] = useState();
+
+  const addToCart = async (vendorProductId) => {
+    try {
+      setUpdating(true);
+
+      if (!token) {
+        toast.info("Please login to add items to your Cart!", {
+          position: "top-center",
+        });
+        navigate("/");
+        return;
+      }
+
+      const res = await axios.post(
+        "/api/cart/add",
+        {
+          vendorProductId,
+          quantity: 1,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setCart(res.data.cart);
+
+      toast.info("Item added to cart!", {
+        position: "top-center",
+        closeOnClick: true,
+      });
+
+      window.dispatchEvent(new Event("cartUpdated"));
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to add item");
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  const removeOneFromCart = async (vendorProductId) => {
+    try {
+      setUpdating(true);
+
+      if (!token) {
+        toast.error("Please login to remove items from your Cart!", {
+          position: "top-center",
+        });
+        navigate("/");
+        return;
+      }
+
+      const res = await axios.post(
+        "/api/cart/remove",
+        {
+          vendorProductId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setCart(res.data.cart);
+
+      toast.info("Item removed from cart!", {
+        position: "top-center",
+        closeOnClick: true,
+      });
+
+      window.dispatchEvent(new Event("cartUpdated"));
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to add item");
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  const fetchCart = async () => {
+    try {
+      const res = await axios.get("/api/cart", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setCart(res.data.cart);
+    } catch (error) {
+      console.error("Fetch cart error:", error.response?.data || error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCart();
+  }, []);
 
   useEffect(() => {
     const fetchProductDetails = async () => {
       try {
         const response = await axios.get(`/api/products/vendor/${productId}`);
-        // Based on your console.log logic: response.data contains the vendorProduct
         setProductDetails(response.data.vendorProduct || response.data);
       } catch (error) {
         console.error("Error fetching product details:", error);
@@ -28,36 +130,40 @@ const ItemPage = () => {
   }
 
   if (!productDetails) {
-    return <div className={styles.container}><h2>Product not found.</h2></div>;
+    return (
+      <div className={styles.container}>
+        <h2>Product not found.</h2>
+      </div>
+    );
   }
 
   return (
     <div className={styles.container}>
       <div className={styles.productWrapper}>
-        {/* Left Side: Image */}
         <div className={styles.imageSection}>
-          <img 
-            src={productDetails.image || "https://via.placeholder.com/400"} 
-            alt={productDetails.name} 
+          <img
+            src={productDetails.images[0]}
+            alt={productDetails.name}
             className={styles.productImage}
           />
         </div>
-
-        {/* Right Side: Content */}
         <div className={styles.infoSection}>
-          <p className={styles.category}>{productDetails.category}</p>
-          <h1 className={styles.title}>{productDetails.name}</h1>
-          <p className={styles.price}>₹{productDetails.price}</p>
-          
+          <h2 className={styles.title}>{productDetails.name}</h2>
           <div className={styles.description}>
-            <h3>About this product</h3>
             <p>
-              {productDetails.description || 
+              {productDetails.description ||
                 "No description provided for this product."}
             </p>
           </div>
-
-          <p><strong>Vendor:</strong> {productDetails.vendor?.storeName}</p>
+          <div className={styles.priceAndAddBtn}>
+            <p className={styles.price}>₹{productDetails.price}</p>
+            <QuantityButton
+              qty={getProductQuantity(cart, productDetails._id)}
+              loading={updating}
+              onAdd={(qty) => addToCart(productDetails._id)}
+              onRemove={(qty) => removeOneFromCart(productDetails._id)}
+            />
+          </div>
         </div>
       </div>
     </div>

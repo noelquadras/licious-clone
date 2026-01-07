@@ -52,7 +52,7 @@
 
 .price {
   font-size: 1.5rem;
-  font-weight: 600;
+  font-weight: 500;
   color: #333;
   margin: 20px 0;
 }
@@ -68,4 +68,9 @@
   padding: 50px;
   font-size: 1.2rem;
   color: #888;
+}
+
+.priceAndAddBtn {
+  display: flex;
+  justify-content: space-between;
 }

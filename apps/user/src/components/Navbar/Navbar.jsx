@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import LocationModal from "../Location/LocationModal";
 import styles from "./Navbar.module.css";
-import { User2, Store, Layers, MapPin, ShoppingCart } from "lucide-react";
+import { Store, Layers, MapPin, ShoppingCart, User } from "lucide-react";
 
 const Navbar = ({ onCartClick, onLoginClick }) => {
   const [address, setAddress] = useState("");
@@ -82,7 +82,7 @@ const Navbar = ({ onCartClick, onLoginClick }) => {
             onClick={() => setShowLocationModal(true)}
             className={styles.locationBtn}
           >
-            <MapPin />
+            <MapPin /> 
             {address ? `${address}` : "Set Location"}
           </button>
         </div>
@@ -98,8 +98,8 @@ const Navbar = ({ onCartClick, onLoginClick }) => {
 
         {/* Navigation Links */}
         <div className={styles.navLinks}>
-          <Link to="/categories" className={styles.link}><Layers />Categories</Link>
-          <Link to="/stores" className={styles.link}><Store />Stores</Link>
+          <Link to="/categories" className={styles.link}><Layers /> Categories</Link>
+          <Link to="/stores" className={styles.link}><Store /> Stores</Link>
 
           <div className={styles.profileWrapper}>
             {isLoggedin ? (
@@ -111,7 +111,7 @@ const Navbar = ({ onCartClick, onLoginClick }) => {
                     setShowProfileMenu(!showProfileMenu);
                   }}
                 >
-                  <User2 />Profile
+                  <User /> Profile
                 </Link>
 
                 {showProfileMenu && (
@@ -129,14 +129,14 @@ const Navbar = ({ onCartClick, onLoginClick }) => {
                 )}
               </>
             ) : (
-              <button onClick={onLoginClick} className={styles.link}>Login</button>
+              <Link onClick={onLoginClick} className={styles.link}><User/> Login</Link>
             )}
           </div>
 
-          <button onClick={onCartClick} className={`${styles.link} ${styles.cartLink}`}>
+          <Link onClick={onCartClick} className={`${styles.link} ${styles.cartLink}`}>
             <ShoppingCart />
             {cart.items.length > 0 ? `${totalQuantity} Items ₹${totalAmount}` : "Cart"}
-          </button>
+          </Link>
         </div>
       </nav>
 

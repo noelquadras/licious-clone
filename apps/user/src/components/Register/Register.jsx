@@ -91,7 +91,7 @@ const Register = ({ onLoginClick }) => {
       </form>
 
       <p className={styles.footerText}>
-        Already have an account? <button onClick={onLoginClick}>Login here</button>
+        Already have an account? <Link onClick={onLoginClick}>Login here</Link>
       </p>
     </div>
   );
