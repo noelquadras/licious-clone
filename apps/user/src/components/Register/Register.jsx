@@ -26,10 +26,20 @@ const Register = ({ onLoginClick }) => {
     setLoading(true);
     try {
       await axios.post("/api/auth/user/register", formData);
-      toast.success("Registration Successful! Please Login.", {
+      toast.success("Registration Successful!", {
         position: "top-center",
       });
-      navigate("/login");
+      const res = await axios.post('/api/auth/user/login', formData);
+
+      const token = res.data.token;
+      const user = res.data.user;
+
+      localStorage.setItem('token', token);
+      localStorage.setItem('fname', user.firstName);
+      localStorage.setItem('lname', user.lastName);
+      localStorage.setItem('email', user.email);
+      localStorage.setItem('phone', user.phone);
+      navigate('/');
     } catch (error) {
       console.error(
         "Registration Error:",
