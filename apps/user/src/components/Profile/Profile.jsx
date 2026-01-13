@@ -10,11 +10,11 @@ const Profile = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [hoveredOrderId, setHoveredOrderId] = useState(null);
   const [selectedOrder, setSelectedOrder] = useState(null);
 
   useEffect(() => {
-    setUsername(localStorage.getItem("username"));
+    const fullname = `${localStorage.getItem("fname")}  ${localStorage.getItem("lname")}`
+    setUsername(fullname);
     setEmail(localStorage.getItem("email"));
     setPhone(localStorage.getItem("phone"));
 

@@ -27,9 +27,10 @@ const Login = ({ isSidebar = false, onSuccess}) => {
       const user = res.data.user;
 
       localStorage.setItem('token', token);
-      localStorage.setItem('username', user.name);
       localStorage.setItem('email', user.email);
       localStorage.setItem('phone', user.phone);
+      localStorage.setItem('fname', user.firstName);
+      localStorage.setItem('lname', user.lastName);
 
       const userType = getUserTypeFromToken();
 
