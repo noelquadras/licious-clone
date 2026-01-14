@@ -52,7 +52,7 @@ const InventoryList = () => {
     <div className={styles.container}>
       <div>
       <h2 className={styles.title}>My Inventory</h2>
-      <Link to="/add-from-catalog">Add Products</Link>
+      <Link to="/create-product">Add Products</Link>
       </div>
 
       {items.length === 0 ? (

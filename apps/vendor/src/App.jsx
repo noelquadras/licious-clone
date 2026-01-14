@@ -3,7 +3,6 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-// Import your components
 import Navbar from "./components/Navbar/Navbar";
 import Register from "./components/Register/Register";
 import VendorDashboard from "./components/VendorDashboard/VendorDashboard"
@@ -13,9 +12,9 @@ import LoginSidebar from "./components/Login/LoginSidebar";
 import InventoryList from "./components/Inventory/InventoryList";
 import CreateProduct from "./components/CreateProduct/CreateProduct";
 import AddFromCatalog from "./components/CreateProduct/AddFromCatalog";
+import VendorOrders from "./components/Orders/VendorOrders";
 
 function App() {
-  const [cartOpen, setCartOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
 
   return (
@@ -36,6 +35,7 @@ function App() {
             <Route path="/inventory" element={<InventoryList/>} />
             <Route path="/create-product" element={<CreateProduct/>} />
             <Route path="/add-form-catalog" element={<AddFromCatalog/>} />
+            <Route path="/orders" element={<VendorOrders/>} />
           </Routes>
         </div>
       </div>
