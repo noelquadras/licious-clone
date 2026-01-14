@@ -282,7 +282,7 @@ export const loginDeliveryPartner = async (req, res) => {
     const token = jwt.sign(
       { id: deliveryPartner._id, userType: "delivery" },
       process.env.JWT_SECRET,
-      { expiresIn: "7d" }
+      { expiresIn: "100d" }
     );
 
     res.json({
