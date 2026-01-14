@@ -10,6 +10,7 @@ import VendorDashboard from "./components/VendorDashboard/VendorDashboard"
 import Profile from "./components/Profile/Profile";
 import ItemPage from "./components/ItemPage/ItemPage";
 import LoginSidebar from "./components/Login/LoginSidebar";
+import InventoryList from "./components/Inventory/InventoryList";
 
 function App() {
   const [cartOpen, setCartOpen] = useState(false);
@@ -30,6 +31,7 @@ function App() {
             <Route path="/register" element={<Register onLoginClick={() => setLoginOpen(true)} />} />
             <Route path="/profile" element={<Profile/>} />
             <Route path="/product/:id" element={<ItemPage/>} />
+            <Route path="/inventory" element={<InventoryList/>} />
           </Routes>
         </div>
       </div>

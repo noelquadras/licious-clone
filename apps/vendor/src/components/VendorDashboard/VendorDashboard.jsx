@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import ProductCard from "../Product/ProductCard";
 import styles from "./VendorDashboard.module.css";
@@ -60,8 +61,10 @@ const VendorDashboard = () => {
       <h1 className={styles.welcomeText}>
         Hi, {username ? username : "Guest Vendor"} 👋
       </h1>
-
-      <h2 className={styles.sectionTitle}>My Products</h2>
+      <div className={styles.sectionTitle}>
+        <h2>My Products</h2>
+        <Link to="/inventory">Veiw All</Link>
+      </div>
 
       <div className={styles.productGrid}>
         {items.map((item) => (
