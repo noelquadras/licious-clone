@@ -179,7 +179,7 @@ export const loginVendor = async (req, res) => {
     const token = jwt.sign(
       { id: vendor._id, userType: "vendor" },
       process.env.JWT_SECRET,
-      { expiresIn: "7d" }
+      { expiresIn: "100d" }
     );
 
     res.json({
