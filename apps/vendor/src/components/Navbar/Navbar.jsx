@@ -93,6 +93,13 @@ const Navbar = ({ onLoginClick }) => {
                       My Profile
                     </Link>
                     <Link
+                      to="/inventory"
+                      className={styles.dropdownItem}
+                      onClick={() => setShowProfileMenu(false)}
+                    >
+                      My Products
+                    </Link>
+                    <Link
                       to="/orders"
                       className={styles.dropdownItem}
                       onClick={() => setShowProfileMenu(false)}
