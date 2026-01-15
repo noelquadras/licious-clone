@@ -24,6 +24,6 @@ router.put("/addresses/:id", protect, authorizeRoles("user"), updateUserAddresse
 router.delete("/addresses/:id", protect, authorizeRoles("user"), deleteUserAddresses);
 
 // Admin routes
-router.get("/", protect, authorizeRoles("admin"), getAllUsers);
+router.get("/all-users", protect, authorizeRoles("admin"), getAllUsers);
 
 export default router;
