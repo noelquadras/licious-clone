@@ -17,7 +17,7 @@ const Navbar = ({ onLoginClick }) => {
       try {
         const token = localStorage.getItem("token");
         if (!token) return;
-        const res = await axios.get("/api/vendors/me", {  
+        const res = await axios.get("/api/vendors/me", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setAddress(res.data.vendors.address || "");
@@ -91,6 +91,13 @@ const Navbar = ({ onLoginClick }) => {
                       onClick={() => setShowProfileMenu(false)}
                     >
                       My Profile
+                    </Link>
+                    <Link
+                      to="/orders"
+                      className={styles.dropdownItem}
+                      onClick={() => setShowProfileMenu(false)}
+                    >
+                      Orders
                     </Link>
                     <button onClick={handleLogout} className={styles.logoutBtn}>
                       Logout
