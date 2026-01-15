@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import styles from "./CreateProduct.module.css";
 
 const CreateProduct = () => {
@@ -55,7 +56,10 @@ const CreateProduct = () => {
       setStock("");
       setImages([]);
     } catch (error) {
-      console.log("Error createProduct:", error.response?.data || error.message);
+      console.log(
+        "Error createProduct:",
+        error.response?.data || error.message
+      );
       alert(error.response?.data?.message || "Failed to create product");
     } finally {
       setSaving(false);
@@ -64,7 +68,10 @@ const CreateProduct = () => {
 
   return (
     <div className={styles.container}>
+      <div>
       <h2 className={styles.title}>Create Your Own Product</h2>
+      <Link to="/add-from-catalog">Add From Catalog</Link>
+      </div>
 
       <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.field}>
