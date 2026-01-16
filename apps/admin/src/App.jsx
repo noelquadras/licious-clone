@@ -16,7 +16,7 @@ import LoginSidebar from "./components/Login/LoginSidebar";
 import InventoryList from "./components/Inventory/InventoryList";
 import CreateProduct from "./components/CreateProduct/CreateProduct";
 import AddFromCatalog from "./components/CreateProduct/AddFromCatalog";
-import AllOrders from "./components/Orders/AllOrders";
+import AdminOrders from "./components/AdminOrders/AdminOrders";
 import Users from "./components/Users/Users";
 import Vendors from "./components/Vendors/Vendors";
 import VendorDetailsPage from "./components/Vendors/VendorDetailsPage";
@@ -93,7 +93,7 @@ function App() {
               path="/orders"
               element={
                 <AdminProtectedRoute>
-                  <AllOrders />
+                  <AdminOrders />
                 </AdminProtectedRoute>
               }
             />
