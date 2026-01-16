@@ -38,17 +38,6 @@ const vendorSchema = new mongoose.Schema(
       enum: ["paddending", "approved", "rejected", "banned"],
       default: "pending",
     },
-    location: {
-      type: {
-        type: String,
-        enum: ["Point"],
-        default: "Point",
-      },
-      coordinates: {
-        type: [Number], // [longitude, latitude]
-        default: [0, 0],
-      },
-    },
     address: {
       addressString: {
         type: String,
