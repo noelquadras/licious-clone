@@ -25,9 +25,16 @@ const DeliveryPartners = () => {
       const data = res.data?.deliveryPartners || res.data || [];
       setPartners(data);
     } catch (err) {
-      console.error("Fetch Delivery Partners Error:", err.response?.data || err.message);
-      setError(err.response?.data?.message || "Failed to load delivery partners");
-      toast.error("Failed to load delivery partners", { position: "top-center" });
+      console.error(
+        "Fetch Delivery Partners Error:",
+        err.response?.data || err.message
+      );
+      setError(
+        err.response?.data?.message || "Failed to load delivery partners"
+      );
+      toast.error("Failed to load delivery partners", {
+        position: "top-center",
+      });
     } finally {
       setLoading(false);
     }
@@ -88,9 +95,7 @@ const DeliveryPartners = () => {
     <div className={styles.container}>
       <div className={styles.topSection}>
         <h2 className={styles.title}>Delivery Partners</h2>
-        <p className={styles.subtitle}>
-          Approve or reject delivery partners
-        </p>
+        <p className={styles.subtitle}>Approve or reject delivery partners</p>
       </div>
 
       {partners.length === 0 ? (
@@ -119,8 +124,12 @@ const DeliveryPartners = () => {
                   <td>{p.phone || "-"}</td>
                   <td>
                     <div className={styles.vehicleBox}>
-                      <p className={styles.vehicleType}>{p.vehicleType || "-"}</p>
-                      <p className={styles.vehicleNumber}>{p.vehicleNumber || "-"}</p>
+                      <p className={styles.vehicleType}>
+                        {p.vehicleType || "-"}
+                      </p>
+                      <p className={styles.vehicleNumber}>
+                        {p.vehicleNumber || "-"}
+                      </p>
                     </div>
                   </td>
 

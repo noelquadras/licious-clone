@@ -26,7 +26,6 @@ import DeliveryPartners from "./components/DeliveryPartners/DeliveryPartners"
 const AdminProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("token");
   const role = localStorage.getItem("role");
-  const status = localStorage.getItem("status");
 
   if (!token) {
     return <Navigate to="/register" replace />;
