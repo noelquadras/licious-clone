@@ -5,32 +5,9 @@ import styles from "./Navbar.module.css";
 import { Store, Layers, MapPin, User } from "lucide-react";
 
 const Navbar = ({ onLoginClick }) => {
-  const [address, setAddress] = useState("");
   const isLoggedin = Boolean(localStorage.getItem("token"));
-  const [showLocationModal, setShowLocationModal] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) return;
-        const res = await axios.get("/api/vendors/me", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setAddress(res.data.vendors.address || "");
-      } catch (error) {
-        console.error("Profile fetch error:", error);
-      }
-    };
-
-    fetchUserProfile();
-
-    const closeMenu = () => setShowProfileMenu(false);
-    window.addEventListener("click", closeMenu);
-    return () => window.removeEventListener("click", closeMenu);
-  }, []);
 
   const handleLogout = () => {
     localStorage.clear();
@@ -78,25 +55,18 @@ const Navbar = ({ onLoginClick }) => {
                     onClick={(e) => e.stopPropagation()}
                   >
                     <Link
-                      to="/profile"
-                      className={styles.dropdownItem}
-                      onClick={() => setShowProfileMenu(false)}
-                    >
-                      My Profile
-                    </Link>
-                    <Link
                       to="/inventory"
                       className={styles.dropdownItem}
                       onClick={() => setShowProfileMenu(false)}
                     >
-                      My Products
+                      Base Products
                     </Link>
                     <Link
                       to="/orders"
                       className={styles.dropdownItem}
                       onClick={() => setShowProfileMenu(false)}
                     >
-                      Orders
+                      All Orders
                     </Link>
                     <button onClick={handleLogout} className={styles.logoutBtn}>
                       Logout
