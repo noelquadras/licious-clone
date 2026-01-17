@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import styles from "./Navbar.module.css";
-import { Store, Layers, MapPin, User } from "lucide-react";
+import { User } from "lucide-react";
 
 const Navbar = ({ onLoginClick }) => {
   const isLoggedin = Boolean(localStorage.getItem("token"));
@@ -18,14 +17,12 @@ const Navbar = ({ onLoginClick }) => {
   return (
     <>
       <nav className={styles.navContainer}>
-        {/* Logo & Location */}
         <div className={styles.logoSection}>
           <Link to="/" className={styles.logo}>
             Licious Clone
           </Link>
         </div>
 
-        {/* Search */}
         <div>
           <input
             type="text"
@@ -34,7 +31,6 @@ const Navbar = ({ onLoginClick }) => {
           />
         </div>
 
-        {/* Navigation Links */}
         <div className={styles.navLinks}>
           <div className={styles.profileWrapper}>
             {isLoggedin ? (
@@ -54,13 +50,6 @@ const Navbar = ({ onLoginClick }) => {
                     className={styles.dropdown}
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <Link
-                      to="/inventory"
-                      className={styles.dropdownItem}
-                      onClick={() => setShowProfileMenu(false)}
-                    >
-                      Base Products
-                    </Link>
                     <Link
                       to="/orders"
                       className={styles.dropdownItem}

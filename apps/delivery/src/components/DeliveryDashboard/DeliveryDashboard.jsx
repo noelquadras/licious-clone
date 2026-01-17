@@ -54,7 +54,7 @@ const DeliveryDashboard = () => {
   if (loading) {
     return (
       <div className={styles.container}>
-        <p className={styles.loadingText}>Loading admin dashboard...</p>
+        <p className={styles.loadingText}>Loading your dashboard...</p>
       </div>
     );
   }
@@ -70,9 +70,9 @@ const DeliveryDashboard = () => {
   return (
     <div className={styles.container}>
       <div className={styles.topSection}>
-        <h2 className={styles.title}>DP Dashboard</h2>
+        <h2 className={styles.title}>Delivery Partner Dashboard</h2>
         <p className={styles.subtitle}>
-          Overview of platform activity and stats
+          Overview of stats
         </p>
       </div>
 
