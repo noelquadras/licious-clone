@@ -11,6 +11,7 @@ const Navbar = ({ onCartClick, onLoginClick }) => {
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [cart, setCart] = useState({ items: [] });
+  const [profileImage, setProfileImage] = useState();
   const navigate = useNavigate();
 
   const items = cart?.items ?? [];
@@ -18,12 +19,12 @@ const Navbar = ({ onCartClick, onLoginClick }) => {
   const totalAmount = items.reduce(
     (sum, item) =>
       sum + (item.vendorProduct?.price ?? 0) * (item.quantity ?? 0),
-    0
+    0,
   );
 
   const totalQuantity = items.reduce(
     (sum, item) => sum + (item.quantity ?? 0),
-    0
+    0,
   );
 
   useEffect(() => {
@@ -35,6 +36,7 @@ const Navbar = ({ onCartClick, onLoginClick }) => {
           headers: { Authorization: `Bearer ${token}` },
         });
         setAddress(res.data.user.address || "");
+        setProfileImage(res.data.user.userImage || "");
       } catch (error) {
         console.error("Profile fetch error:", error);
       }
@@ -74,7 +76,7 @@ const Navbar = ({ onCartClick, onLoginClick }) => {
     localStorage.clear(); // Clear all user data
     setShowProfileMenu(false);
     setCart({ items: [] });
-    setAddress('');
+    setAddress("");
     navigate("/");
   };
 
@@ -123,7 +125,18 @@ const Navbar = ({ onCartClick, onLoginClick }) => {
                     setShowProfileMenu(!showProfileMenu);
                   }}
                 >
-                  <User /> Profile
+                  <div className={styles.avatar}>
+                    {profileImage ? (
+                      <img
+                        src={`http://localhost:5000${profileImage}`}
+                        alt="pfp"
+                        className={styles.avatarImg}
+                      />
+                    ) : (
+                      <User />
+                    )}{" "}
+                  </div>
+                  Profile
                 </Link>
 
                 {showProfileMenu && (
