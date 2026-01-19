@@ -3,6 +3,7 @@ import axios from "axios";
 import OrderDetailsModal from "./OrderDetailsModal";
 import styles from "./Profile.module.css";
 import EditProfileModal from "./EditProfileModal";
+import AddressPage from "./AddressPage";
 
 const Profile = () => {
   const token = localStorage.getItem("token");
@@ -139,7 +140,7 @@ const Profile = () => {
           Edit Profile
         </button>
       </div>
-
+      <AddressPage />
       <h3 className={styles.historyTitle}>Order History</h3>
 
       {loading ? (
