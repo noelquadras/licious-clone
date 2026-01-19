@@ -21,7 +21,6 @@
   left: 15px;
   border: 1px solid #eee;
   z-index: 1000;
-  overflow: hidden;
   animation: fadeIn 0.2s ease-out;
 }
 
@@ -76,6 +75,12 @@
 }
 
 @keyframes slideUp {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
