@@ -35,7 +35,7 @@ const orderSchema = new mongoose.Schema(
     totalPrice: { type: Number, required: true },
 
     // FINAL ENUM (Merged & Standardized)
-    status: {
+    deliveryStatus: {
       type: String,
       enum: [
         "pending",
@@ -45,6 +45,10 @@ const orderSchema = new mongoose.Schema(
         "cancelled",
       ],
       default: "pending",
+    },
+    deliveryFailedStatus: {
+      type: String,
+      enum: ["cancelled-by-rider", "cancelled-by-customer", "failed-delivery", "return-to-store", "returned", "order-damaged"],
     },
 
     // UPDATED DELIVERY PARTNER FIELD
