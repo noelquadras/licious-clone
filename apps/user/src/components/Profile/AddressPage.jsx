@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import styles from "./AddressPage.module.css";
+import AddressModal from "./AddressModal.jsx";
 
 const AddressPage = () => {
   const token = localStorage.getItem("token");
@@ -16,6 +17,7 @@ const AddressPage = () => {
     landmark: "",
     city: "",
     label: "Home",
+    customLabel: "",
     latitude: "",
     longitude: "",
   });
@@ -117,7 +119,10 @@ const AddressPage = () => {
         flatNo: newAddressForm.flatNo,
         landmark: newAddressForm.landmark,
         city: newAddressForm.city,
-        label: newAddressForm.label,
+        label:
+          newAddressForm.label === "Other"
+            ? newAddressForm.customLabel
+            : newAddressForm.label,
         latitude: Number(newAddressForm.latitude),
         longitude: Number(newAddressForm.longitude),
       };
@@ -240,10 +245,11 @@ const AddressPage = () => {
 
   return (
     <div className={styles.addressBox}>
-      <h3 className={styles.sectionTitle}>My Addresses</h3>
-
-      {addrLoading && <p className={styles.loadingText}>Updating address...</p>}
-
+      {addrLoading ? (
+        <h3 className={styles.sectionTitle}>Updating address...</h3>
+      ) : (
+        <h3 className={styles.sectionTitle}>My Addresses</h3>
+      )}
       {addresses.length === 0 ? (
         <p className={styles.loadingText}>No addresses saved yet.</p>
       ) : (
@@ -303,292 +309,37 @@ const AddressPage = () => {
           })}
         </div>
       )}
-
       <button
         className={styles.editBtn}
         onClick={() => setAddAddress(!addAddress)}
       >
         Add New Address
       </button>
-      {addAddress && (
-        <form className={styles.addressForm} onSubmit={handleAddAddress}>
-          <div className={styles.twoCol}>
-            <input
-              className={styles.input}
-              placeholder="Flat No"
-              value={newAddressForm.flatNo}
-              onChange={(e) =>
-                setNewAddressForm({ ...newAddressForm, flatNo: e.target.value })
-              }
-              required
-            />
 
-            <input
-              className={styles.input}
-              placeholder="City"
-              value={newAddressForm.city}
-              onChange={(e) =>
-                setNewAddressForm({ ...newAddressForm, city: e.target.value })
-              }
-              required
-            />
-          </div>
-
-          <input
-            className={styles.input}
-            placeholder="Address"
-            value={newAddressForm.address}
-            onChange={(e) =>
-              setNewAddressForm({ ...newAddressForm, address: e.target.value })
-            }
-            required
-          />
-
-          <input
-            className={styles.input}
-            placeholder="Landmark"
-            value={newAddressForm.landmark}
-            onChange={(e) =>
-              setNewAddressForm({ ...newAddressForm, landmark: e.target.value })
-            }
-            required
-          />
-
-          <div className={styles.twoCol}>
-            <select
-              className={styles.input}
-              value={newAddressForm.label}
-              onChange={(e) =>
-                setNewAddressForm({ ...newAddressForm, label: e.target.value })
-              }
-              required
-            >
-              <option value="Home">Home</option>
-              <option value="Work">Work</option>
-              <option value="Other">Other</option>
-            </select>
-
-            <button
-              className={styles.addBtn}
-              type="button"
-              onClick={() => {
-                if (!navigator.geolocation) return;
-
-                navigator.geolocation.getCurrentPosition(
-                  (pos) => {
-                    setNewAddressForm((prev) => ({
-                      ...prev,
-                      latitude: pos.coords.latitude,
-                      longitude: pos.coords.longitude,
-                    }));
-                  },
-                  (err) => console.log("Location error:", err.message),
-                );
-              }}
-            >
-              Auto Location
-            </button>
-          </div>
-
-          <div className={styles.twoCol}>
-            <input
-              className={styles.input}
-              type="number"
-              placeholder="Latitude"
-              value={newAddressForm.latitude}
-              onChange={(e) =>
-                setNewAddressForm({
-                  ...newAddressForm,
-                  latitude: e.target.value,
-                })
-              }
-              required
-            />
-
-            <input
-              className={styles.input}
-              type="number"
-              placeholder="Longitude"
-              value={newAddressForm.longitude}
-              onChange={(e) =>
-                setNewAddressForm({
-                  ...newAddressForm,
-                  longitude: e.target.value,
-                })
-              }
-              required
-            />
-          </div>
-
-          <button className={styles.saveAddressBtn} disabled={addrLoading}>
-            {addrLoading ? "Saving..." : "Save Address"}
-          </button>
-        </form>
-      )}
-
-      {editModalOpen && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modalBox}>
-            <div className={styles.modalHeader}>
-              <h3 className={styles.modalTitle}>Edit Address</h3>
-              <button
-                className={styles.closeBtn}
-                type="button"
-                onClick={() => setEditModalOpen(false)}
-              >
-                ✕
-              </button>
-            </div>
-
-            <form
-              className={styles.addressForm}
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleEditAddress(editingAddressId);
-              }}
-            >
-              <div className={styles.twoCol}>
-                <input
-                  className={styles.input}
-                  placeholder="Flat No"
-                  value={editAddressForm.flatNo}
-                  onChange={(e) =>
-                    setEditAddressForm({
-                      ...editAddressForm,
-                      flatNo: e.target.value,
-                    })
-                  }
-                  required
-                />
-                <input
-                  className={styles.input}
-                  placeholder="City"
-                  value={editAddressForm.city}
-                  onChange={(e) =>
-                    setEditAddressForm({
-                      ...editAddressForm,
-                      city: e.target.value,
-                    })
-                  }
-                  required
-                />
-              </div>
-
-              <input
-                className={styles.input}
-                placeholder="Address"
-                value={editAddressForm.address}
-                onChange={(e) =>
-                  setEditAddressForm({
-                    ...editAddressForm,
-                    address: e.target.value,
-                  })
-                }
-                required
-              />
-
-              <input
-                className={styles.input}
-                placeholder="Landmark"
-                value={editAddressForm.landmark}
-                onChange={(e) =>
-                  setEditAddressForm({
-                    ...editAddressForm,
-                    landmark: e.target.value,
-                  })
-                }
-                required
-              />
-
-              <div className={styles.twoCol}>
-                <select
-                  className={styles.input}
-                  value={editAddressForm.label}
-                  onChange={(e) =>
-                    setEditAddressForm({
-                      ...editAddressForm,
-                      label: e.target.value,
-                    })
-                  }
-                  required
-                >
-                  <option value="Home">Home</option>
-                  <option value="Work">Work</option>
-                  <option value="Other">Other</option>
-                </select>
-
-                <button
-                  className={styles.addBtn}
-                  type="button"
-                  onClick={() => {
-                    if (!navigator.geolocation) return;
-
-                    navigator.geolocation.getCurrentPosition(
-                      (pos) => {
-                        setEditAddressForm((prev) => ({
-                          ...prev,
-                          latitude: pos.coords.latitude,
-                          longitude: pos.coords.longitude,
-                        }));
-                      },
-                      (err) => console.log("Location error:", err.message),
-                    );
-                  }}
-                >
-                  Auto Location
-                </button>
-              </div>
-
-              <div className={styles.twoCol}>
-                <input
-                  className={styles.input}
-                  type="number"
-                  placeholder="Latitude"
-                  value={editAddressForm.latitude}
-                  onChange={(e) =>
-                    setEditAddressForm({
-                      ...editAddressForm,
-                      latitude: e.target.value,
-                    })
-                  }
-                  required
-                />
-                <input
-                  className={styles.input}
-                  type="number"
-                  placeholder="Longitude"
-                  value={editAddressForm.longitude}
-                  onChange={(e) =>
-                    setEditAddressForm({
-                      ...editAddressForm,
-                      longitude: e.target.value,
-                    })
-                  }
-                  required
-                />
-              </div>
-
-              <div className={styles.modalActions}>
-                <button
-                  type="button"
-                  className={styles.cancelBtn}
-                  onClick={() => setEditModalOpen(false)}
-                >
-                  Cancel
-                </button>
-
-                <button
-                  type="submit"
-                  className={styles.saveBtn}
-                  disabled={addrLoading}
-                >
-                  {addrLoading ? "Saving..." : "Save Changes"}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      <AddressModal
+        isOpen={addAddress}
+        title="Add New Address"
+        mode="add"
+        formData={newAddressForm}
+        setFormData={setNewAddressForm}
+        loading={addrLoading}
+        onClose={() => setAddAddress(false)}
+        onSubmit={(e) => {
+          handleAddAddress(e);
+          setAddAddress(false);
+        }}
+      />
+      
+      <AddressModal
+        isOpen={editModalOpen}
+        title="Edit Address"
+        mode="edit"
+        formData={editAddressForm}
+        setFormData={setEditAddressForm}
+        loading={addrLoading}
+        onClose={() => setEditModalOpen(false)}
+        onSubmit={() => handleEditAddress(editingAddressId)}
+      />
     </div>
   );
 };
