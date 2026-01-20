@@ -6,17 +6,20 @@ import { X } from "lucide-react";
 import { useCart } from "../../context/CartContext";
 
 const Cart = ({ isSidebar = false }) => {
-  const { cart, addToCart, removeFromCart, removeProductFromCart } = useCart();
+  const { cart, addToCart, removeFromCart, removeProductFromCart, fetchCart } =
+    useCart();
   let navigate = useNavigate();
 
   const token = localStorage.getItem("token");
 
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
     if (!token) {
       toast.info("Please log in to continue", { position: "top-center" });
       navigate("/");
       return;
     }
+
+    await fetchCart();
 
     if (!cart || cart.items.length === 0) {
       toast.info("Your cart is empty.", { position: "top-center" });

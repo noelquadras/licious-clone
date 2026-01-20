@@ -8,9 +8,11 @@ import { useUser } from "../../context/UserContext";
 
 const Checkout = () => {
   const { cart, fetchCart, loading } = useCart();
-  const { address } = useUser();
+  const { user } = useUser();
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
+
+  const address = user?.address;
 
   useEffect(() => {
     if (!token) {
@@ -44,6 +46,7 @@ const Checkout = () => {
       );
 
       toast.success("Order placed successfully!", { position: "top-center" });
+      await fetchCart();
       navigate("/profile");
     } catch (error) {
       toast.error(error.response?.data?.message || "Order failed", {
@@ -55,7 +58,7 @@ const Checkout = () => {
   if (loading)
     return <h2 className={styles.container}>Loading checkout details...</h2>;
 
-  const totalAmount = cart.items.reduce(
+  const totalAmount = cart?.items?.reduce(
     (sum, item) => sum + item.vendorProduct.price * item.quantity,
     0,
   );
@@ -66,7 +69,7 @@ const Checkout = () => {
 
       <div className={styles.summarySection}>
         <h2>Order Summary</h2>
-        {cart.items.map((item) => (
+        {cart?.items?.map((item) => (
           <div key={item.vendorProduct._id} className={styles.itemRow}>
             <div>
               <h4 className={styles.itemTitle}>{item.vendorProduct.name}</h4>
