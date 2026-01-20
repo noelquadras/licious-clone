@@ -46,6 +46,7 @@ const orderSchema = new mongoose.Schema(
       ],
       default: "pending",
     },
+    
     deliveryFailedStatus: {
       type: String,
       enum: ["cancelled-by-rider", "cancelled-by-customer", "failed-delivery", "return-to-store", "returned", "order-damaged"],
