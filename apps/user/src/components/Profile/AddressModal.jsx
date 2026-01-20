@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./AddressModal.module.css";
 import { useUser } from "../../context/UserContext";
+import LocationModal from "../Location/LocationModal";
 
 const AddressModal = ({
   isOpen,
@@ -12,10 +13,19 @@ const AddressModal = ({
   onClose,
   onSubmit,
 }) => {
-  const { addresses } = useUser();
+  const { addresses, user } = useUser();
 
+  const [showLocationModal, setShowLocationModal] = useState(false);
   const homeExists = addresses?.some((a) => a.label === "Home");
   const workExists = addresses?.some((a) => a.label === "Work");
+
+  const handleSubmit = () => {
+    setFormData({
+      ...formData,
+      longitude: user.location.coordinates[0],
+      latitude: user.location.coordinates[1],
+    });
+  };
 
   useEffect(() => {
     if (!isOpen) return;
@@ -31,21 +41,6 @@ const AddressModal = ({
   }, [isOpen, mode, homeExists, workExists, formData.label]);
 
   if (!isOpen) return null;
-
-  const handleAutoLocation = () => {
-    if (!navigator.geolocation) return;
-
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setFormData((prev) => ({
-          ...prev,
-          latitude: pos.coords.latitude,
-          longitude: pos.coords.longitude,
-        }));
-      },
-      (err) => console.log("Location error:", err.message),
-    );
-  };
 
   const showCustomLabel = mode === "add" && formData.label === "Other";
 
@@ -165,9 +160,9 @@ const AddressModal = ({
               <button
                 className={styles.addBtn}
                 type="button"
-                onClick={handleAutoLocation}
+                onClick={() => setShowLocationModal(true)}
               >
-                Auto Location
+                Location
               </button>
             )}
           </div>
@@ -176,35 +171,11 @@ const AddressModal = ({
             <button
               className={styles.addBtnFull}
               type="button"
-              onClick={handleAutoLocation}
+              onClick={() => setShowLocationModal(true)}
             >
-              Auto Location
+              Location
             </button>
           )}
-
-          <div className={styles.twoCol}>
-            <input
-              className={styles.input}
-              type="number"
-              placeholder="Latitude"
-              value={formData.latitude}
-              onChange={(e) =>
-                setFormData({ ...formData, latitude: e.target.value })
-              }
-              required
-            />
-
-            <input
-              className={styles.input}
-              type="number"
-              placeholder="Longitude"
-              value={formData.longitude}
-              onChange={(e) =>
-                setFormData({ ...formData, longitude: e.target.value })
-              }
-              required
-            />
-          </div>
 
           <div className={styles.modalActions}>
             <button
@@ -215,7 +186,12 @@ const AddressModal = ({
               Cancel
             </button>
 
-            <button className={styles.saveBtn} type="submit" disabled={loading}>
+            <button
+              className={styles.saveBtn}
+              type="submit"
+              onClick={handleSubmit}
+              disabled={loading}
+            >
               {loading
                 ? "Saving..."
                 : mode === "add"
@@ -225,6 +201,9 @@ const AddressModal = ({
           </div>
         </form>
       </div>
+      {showLocationModal && (
+        <LocationModal onClose={() => setShowLocationModal(false)} />
+      )}
     </div>
   );
 };
