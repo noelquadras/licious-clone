@@ -17,8 +17,10 @@ const Navbar = ({ onCartClick, onLoginClick }) => {
 
   const selectedAddress = addresses.find((a) => a._id === selectedAddressId);
 
+  const addressLabel = selectedAddress ? `${selectedAddress.label}` : "";
+
   const addressText = selectedAddress
-    ? `${selectedAddress.flatNo}, ${selectedAddress.address}`
+    ? `${selectedAddress.address}`
     : "Set Location";
 
   const totalAmount = items.reduce(
@@ -56,8 +58,11 @@ const Navbar = ({ onCartClick, onLoginClick }) => {
             onClick={() => setShowLocationModal(true)}
             className={styles.locationBtn}
           >
-            <MapPin />
-            {addressText}
+            <MapPin size={40} />
+            <div>
+              <div className={styles.label}>{addressLabel}</div>
+              <div className={styles.addressTxt}>{addressText}</div>
+            </div>
           </button>
         </div>
 
