@@ -9,28 +9,35 @@ import AddressPage from "../Profile/AddressPage";
 
 const Checkout = () => {
   const { cart, fetchCart, loading } = useCart();
-  const { user } = useUser();
+  const { user, addresses, selectedAddressId } = useUser();
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const [showAddressPage, setShowAddressPage] = useState(false);
 
-  const address = user?.address;
+  const deliveryLocation = addresses.find((a) => a._id === selectedAddressId);
+  const address = deliveryLocation?.address || user?.address;
+
+  const [cartChecked, setCartChecked] = useState(false);
 
   useEffect(() => {
-    if (!token) {
-      toast.warning("Please login again", { position: "top-center" });
-      navigate("/");
-      return;
-    }
+    if (!token) return;
 
-    if (!cart || cart.items.length === 0) {
+    const run = async () => {
+      await fetchCart();
+      setCartChecked(true);
+    };
+
+    run();
+  }, [token]);
+
+  useEffect(() => {
+    if (!cartChecked) return;
+
+    if (!cart || cart?.items?.length === 0) {
       toast.warning("Your Cart is Empty", { position: "top-center" });
-      navigate("/cart");
-      return;
+      navigate("/");
     }
-
-    fetchCart();
-  }, [navigate, token]);
+  }, [cartChecked, cart]);
 
   const placeOrder = async () => {
     if (!address) {
@@ -39,13 +46,20 @@ const Checkout = () => {
     }
 
     try {
-      await axios.post(
-        "/api/orders/place",
-        {},
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
+      if (!deliveryLocation) {
+        toast.error("Please select a delivery address first.");
+        return;
+      }
+
+      const payload = {
+        longitude: deliveryLocation?.location?.coordinates?.[0],
+        latitude: deliveryLocation?.location?.coordinates?.[1],
+        address: deliveryLocation?.address,
+      };
+
+      await axios.post("/api/orders/place", payload, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       toast.success("Order placed successfully!", { position: "top-center" });
       await fetchCart();
@@ -61,7 +75,8 @@ const Checkout = () => {
     return <h2 className={styles.container}>Loading checkout details...</h2>;
 
   const totalAmount = cart?.items?.reduce(
-    (sum, item) => sum + item.vendorProduct.price * item.quantity,
+    (sum, item) =>
+      sum + (item.vendorProduct?.price ?? 0) * (item.quantity ?? 0),
     0,
   );
 
@@ -108,7 +123,18 @@ const Checkout = () => {
           {address ? "Change Address" : "Add Address in Profile"}
         </button>
       </div>
-      {showAddressPage && <AddressPage />}
+      {showAddressPage && (
+        <div>
+          <button
+            onClick={() => setShowAddressPage(false)}
+            className={styles.closeAddressBtn}
+            type="button"
+          >
+            Close
+          </button>
+          <AddressPage />
+        </div>
+      )}
 
       <p>
         <strong>Payment Method:</strong> Cash on Delivery (COD)
@@ -117,7 +143,7 @@ const Checkout = () => {
       <button
         onClick={placeOrder}
         className={styles.placeOrderBtn}
-        disabled={!address}
+        disabled={!deliveryLocation}
       >
         Confirm & Place Order
       </button>
