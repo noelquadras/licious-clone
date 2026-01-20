@@ -61,3 +61,30 @@
   text-align: center;
   color: #6c757d;
 }
+
+.unavailable {
+  filter: grayscale(100%);
+  opacity: 0.5;
+}
+
+.outOfStock {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center content vertically and horizontally */
+
+  height: 100%;
+}
+
+.outOfStockTxt {
+  position: absolute;
+  top: 0;
+  z-index: 2;
+  background-color: rgba(0, 0, 0, 0.85); /* Semi-transparent black */
+  color: #ffffff;
+  padding: 8px;
+  border-radius: 8px;
+  font-weight: bold;
+  text-align: center;
+  width: 95%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}

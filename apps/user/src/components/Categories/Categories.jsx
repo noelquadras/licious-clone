@@ -3,7 +3,7 @@ import axios from "axios";
 import ProductCard from "../Product/ProductCard";
 import { getProductQuantity } from "../../utils/cartUtils";
 import styles from "./Categories.module.css";
-import { useCart } from "../../context/CartContext"
+import { useCart } from "../../context/CartContext";
 
 // Category Button Component
 const CategoryButton = ({ category, isSelected, onClick }) => {
@@ -32,7 +32,7 @@ const Categories = () => {
       setCategoryItems(allProducts);
     } else {
       const filteredItems = allProducts.filter(
-        (item) => item.category === categoryName
+        (item) => item.category === categoryName,
       );
       setCategoryItems(filteredItems);
     }
@@ -101,15 +101,23 @@ const Categories = () => {
         </h2>
 
         {categoryItems.length === 0 ? (
-          <p className={styles.noProducts}>No products found in this category.</p>
+          <p className={styles.noProducts}>
+            No products found in this category.
+          </p>
         ) : (
           <div className={styles.productsGrid}>
             {categoryItems.map((item) => (
-              <div key={item._id}>
-                <ProductCard
-                  product={item}
-                  quantity={getProductQuantity(cart, item._id)}
-                />
+              <div
+                key={item._id}
+                className={item.stock === 0 ? styles.unavailable : ""}
+              >
+                <div className={item.stock === 0 ? styles.outOfStock : ""}>
+                  {item.stock === 0 && <div className={styles.outOfStockTxt}>Out of Stock</div>}
+                  <ProductCard
+                    product={item}
+                    quantity={getProductQuantity(cart, item._id)}
+                  />
+                </div>
               </div>
             ))}
           </div>
