@@ -38,6 +38,19 @@ const vendorSchema = new mongoose.Schema(
       enum: ["pending", "approved", "rejected", "suspended", "blacklisted"],
       default: "pending",
     },
+    location: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point",
+        required: true,
+      },
+      coordinates: {
+        type: [Number], // [longitude, latitude]
+        default: [0, 0],
+        required: true,
+      },
+    },
     address: {
       addressString: {
         type: String,
@@ -46,19 +59,6 @@ const vendorSchema = new mongoose.Schema(
       city: {
         type: String,
         required: [true, "City is required"],
-      },
-      location: {
-        type: {
-          type: String,
-          enum: ["Point"],
-          default: "Point",
-          required: true,
-        },
-        coordinates: {
-          type: [Number], // [longitude, latitude]
-          default: [0, 0],
-          required: true,
-        },
       },
     },
     createdBy: {
