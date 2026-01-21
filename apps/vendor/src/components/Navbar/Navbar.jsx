@@ -18,7 +18,7 @@ const Navbar = ({ onLoginClick }) => {
         const res = await axios.get("/api/vendors/me", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setAddress(res?.data?.vendor?.address || "");
+        setAddress(res?.data?.vendor?.address.addressString || "");
       } catch (error) {
         console.error("Profile fetch error:", error);
       }

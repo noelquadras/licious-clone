@@ -31,7 +31,7 @@ const LocationModal = ({ onClose, onSave }) => {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
-            }
+            },
           );
 
           onSave(res.data.user.address);
@@ -46,28 +46,17 @@ const LocationModal = ({ onClose, onSave }) => {
       (error) => {
         alert("Location permission denied or unavailable");
         setLoading(false);
-      }
+      },
     );
   };
 
   const handleManualSelect = async ({ address, latitude, longitude }) => {
-    try {
-      const res = await axios.put(
-        "/api/users/location",
-        { address, latitude, longitude },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      onSave(res.data.user.address);
-      onClose();
-    } catch (error) {
-      console.error(error);
-      alert("Failed to save selected location");
-    }
+    onSave({
+      addr: address,
+      lat: latitude,
+      lon: longitude,
+    });
+    onClose();
   };
 
   return (
@@ -76,9 +65,9 @@ const LocationModal = ({ onClose, onSave }) => {
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         <h3 className={styles.title}>Select Delivery Location</h3>
 
-        <button 
-          className={styles.gpsButton} 
-          onClick={useCurrentLocation} 
+        <button
+          className={styles.gpsButton}
+          onClick={useCurrentLocation}
           disabled={loading}
         >
           {loading ? "Finding you..." : "📍 Use current location"}

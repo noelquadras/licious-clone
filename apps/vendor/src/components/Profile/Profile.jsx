@@ -18,8 +18,8 @@ const Profile = () => {
       });
 
       const vendor = res.data.vendor;
-      
-      setAddress(vendor.address);
+
+      setAddress(vendor.address.addressString);
       setEmail(vendor.email);
       setPhone(vendor.phone);
       setStatus(vendor.status);
@@ -52,8 +52,8 @@ const Profile = () => {
                 status === "approved"
                   ? styles.approved
                   : status === "pending"
-                  ? styles.pending
-                  : styles.rejected
+                    ? styles.pending
+                    : styles.rejected
               }`}
             >
               {status || "pending"}

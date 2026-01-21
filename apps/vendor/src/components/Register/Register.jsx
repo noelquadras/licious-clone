@@ -3,17 +3,19 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import styles from "./Register.module.css";
+import LocationModal from "../Location/LocationModal";
 
 const Register = ({ onLoginClick }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [locationModalOpen, setLocationModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     storeName: "",
     ownerName: "",
     email: "",
     password: "",
     phone: "",
-    address: "",
+    addressString: "",
     latitude: "",
     longitude: "",
     documents: "",
@@ -35,13 +37,22 @@ const Register = ({ onLoginClick }) => {
     } catch (error) {
       console.error(
         "Registration Error:",
-        error.response?.data || error.message
+        error.response?.data || error.message,
       );
       const errorMsg = error.response?.data?.message || "Registration Failed";
       toast.error(errorMsg, { position: "top-center" });
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleLocation = ({ addr, lat, lon }) => {
+    setFormData({
+      ...formData,
+      addressString: addr,
+      latitude: lat,
+      longitude: lon,
+    });
   };
 
   return (
@@ -108,27 +119,20 @@ const Register = ({ onLoginClick }) => {
           required
         />
 
-        <div className={styles.row}>
-          <input
-            type="number"
-            name="latitude"
-            placeholder="Latitude"
-            value={formData.latitude}
-            onChange={handleChange}
-            className={styles.inputField}
-            required
-          />
+        <button
+          type="button"
+          className={styles.registerButton}
+          onClick={() => setLocationModalOpen(true)}
+        >
+          Location
+        </button>
 
-          <input
-            type="number"
-            name="longitude"
-            placeholder="Longitude"
-            value={formData.longitude}
-            onChange={handleChange}
-            className={styles.inputField}
-            required
+        {locationModalOpen && (
+          <LocationModal
+            onClose={() => setLocationModalOpen(false)}
+            onSave={handleLocation}
           />
-        </div>
+        )}
 
         <input
           type="text"
