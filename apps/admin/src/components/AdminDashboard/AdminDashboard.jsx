@@ -11,6 +11,7 @@ import {
   CheckCircle2,
   XCircle,
   TrendingUp,
+  ShoppingBag,
 } from "lucide-react";
 import styles from "./AdminDashboard.module.css";
 
@@ -24,6 +25,7 @@ const AdminDashboard = () => {
   const [deliveryPartners, setDeliveryPartners] = useState([]);
   const [orders, setOrders] = useState([]);
   const [error, setError] = useState("");
+  const [products, setProducts] = useState([]);
 
   // ---- Fetchers ----
   useEffect(() => {
@@ -142,6 +144,36 @@ const AdminDashboard = () => {
     fetchOrders();
   }, [token]);
 
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const res = await axios.get("/api/products/base", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const productsData =
+          res.data?.products || res.data?.baseProducts || res.data || [];
+        setProducts(Array.isArray(productsData) ? productsData : []);
+      } catch (err) {
+        console.error(
+          "Admin Dashboard Error:",
+          err.response?.data || err.message,
+        );
+        setError(
+          err.response?.data?.message || "Failed to load admin dashboard",
+        );
+        toast.error("Failed to load dashboard", { position: "top-center" });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [token]);
+
   // ---- Helpers ----
   const normalize = (v = "") => String(v).trim().toLowerCase();
 
@@ -213,11 +245,14 @@ const AdminDashboard = () => {
     const deliveryCompletionRate =
       totalOrders === 0 ? 0 : Math.round((deliveredOrders / totalOrders) * 100);
 
+    const totalProducts = products.length;
+
     return {
       totalUsers,
       totalVendors,
       totalDeliveryPartners,
       totalOrders,
+      totalProducts,
       pendingVendors,
       approvedVendors,
       rejectedVendors,
@@ -232,7 +267,7 @@ const AdminDashboard = () => {
       vendorApprovalRate,
       deliveryCompletionRate,
     };
-  }, [users, vendors, deliveryPartners, orders]);
+  }, [users, vendors, deliveryPartners, orders, products]);
 
   const StatChip = ({ icon: Icon, label, value, tone = "neutral" }) => {
     return (
@@ -362,6 +397,33 @@ const AdminDashboard = () => {
         { label: "Processing", value: calcStats.processingOrders },
         { label: "Out for Delivery", value: calcStats.outForDeliveryOrders },
         { label: "Cancelled", value: calcStats.cancelledOrders },
+      ],
+    },
+    {
+      title: "Products",
+      icon: ShoppingBag,
+      value: calcStats.totalProducts,
+      badge: "Base catalog",
+      onClick: () => navigate("/products"),
+      accent: "orange",
+      chips: [
+        {
+          icon: TrendingUp,
+          label: "Inventory",
+          value: "Catalog",
+          tone: "neutral",
+        },
+        {
+          icon: CheckCircle2,
+          label: "Total",
+          value: calcStats.totalProducts,
+          tone: "good",
+        },
+      ],
+      rows: [
+        { label: "Total Products", value: calcStats.totalProducts },
+        { label: "Active Vendors", value: calcStats.approvedVendors },
+        { label: "Orders (7d)", value: calcStats.last7DaysOrders },
       ],
     },
     {
