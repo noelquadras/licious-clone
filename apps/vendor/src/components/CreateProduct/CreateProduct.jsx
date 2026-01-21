@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import styles from "./CreateProduct.module.css";
@@ -11,12 +11,32 @@ const CreateProduct = () => {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [stock, setStock] = useState("");
-  const [images, setImages] = useState([]);
+
+  const [images, setImages] = useState([]); // ✅ files
+  const [previewUrls, setPreviewUrls] = useState([]); // ✅ previews
 
   const [saving, setSaving] = useState(false);
 
   const handleImageChange = (e) => {
-    setImages(Array.from(e.target.files));
+    const files = Array.from(e.target.files || []);
+
+    setImages(files);
+    setPreviewUrls(files.map((file) => URL.createObjectURL(file)));
+  };
+
+  // ✅ cleanup object URLs to avoid memory leak
+  useEffect(() => {
+    return () => {
+      previewUrls.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, [previewUrls]);
+
+  const handleRemoveImage = (index) => {
+    const updatedImages = images.filter((_, i) => i !== index);
+    const updatedPreviews = previewUrls.filter((_, i) => i !== index);
+
+    setImages(updatedImages);
+    setPreviewUrls(updatedPreviews);
   };
 
   const handleSubmit = async (e) => {
@@ -54,11 +74,13 @@ const CreateProduct = () => {
       setDescription("");
       setPrice("");
       setStock("");
+
       setImages([]);
+      setPreviewUrls([]);
     } catch (error) {
       console.log(
         "Error createProduct:",
-        error.response?.data || error.message
+        error.response?.data || error.message,
       );
       alert(error.response?.data?.message || "Failed to create product");
     } finally {
@@ -68,9 +90,11 @@ const CreateProduct = () => {
 
   return (
     <div className={styles.container}>
-      <div>
-      <h2 className={styles.title}>Create Your Own Product</h2>
-      <Link to="/add-from-catalog">Add From Catalog</Link>
+      <div className={styles.headRow}>
+        <h2 className={styles.title}>Create Your Own Product</h2>
+        <Link className={styles.linkBtn} to="/add-from-catalog">
+          Add From Catalog
+        </Link>
       </div>
 
       <form className={styles.form} onSubmit={handleSubmit}>
@@ -125,9 +149,34 @@ const CreateProduct = () => {
 
         <div className={styles.field}>
           <label>Images</label>
-          <input type="file" multiple onChange={handleImageChange} />
+          <input
+            type="file"
+            multiple
+            accept="image/*"
+            onChange={handleImageChange}
+          />
+
           {images.length > 0 && (
             <p className={styles.fileText}>{images.length} file(s) selected</p>
+          )}
+
+          {/* ✅ Preview Grid */}
+          {previewUrls.length > 0 && (
+            <div className={styles.previewWrap}>
+              {previewUrls.map((url, index) => (
+                <div key={index} className={styles.previewItem}>
+                  <img src={url} alt="preview" className={styles.previewImg} />
+
+                  <button
+                    type="button"
+                    className={styles.removeImgBtn}
+                    onClick={() => handleRemoveImage(index)}
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
+            </div>
           )}
         </div>
 
