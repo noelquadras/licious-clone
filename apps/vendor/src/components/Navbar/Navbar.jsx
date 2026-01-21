@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import LocationModal from "../Location/LocationModal";
 import styles from "./Navbar.module.css";
 import { Store, Layers, MapPin, User } from "lucide-react";
 
 const Navbar = ({ onLoginClick }) => {
   const [address, setAddress] = useState("");
   const isLoggedin = Boolean(localStorage.getItem("token"));
-  const [showLocationModal, setShowLocationModal] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const navigate = useNavigate();
 
@@ -20,7 +18,7 @@ const Navbar = ({ onLoginClick }) => {
         const res = await axios.get("/api/vendors/me", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setAddress(res.data.vendors.address || "");
+        setAddress(res?.data?.vendor?.address || "");
       } catch (error) {
         console.error("Profile fetch error:", error);
       }
@@ -47,13 +45,10 @@ const Navbar = ({ onLoginClick }) => {
           <Link to="/" className={styles.logo}>
             Licious Clone
           </Link>
-          <button
-            onClick={() => setShowLocationModal(true)}
-            className={styles.locationBtn}
-          >
+          <div className={styles.locationBtn}>
             <MapPin />
             {address ? `${address}` : "Set Location"}
-          </button>
+          </div>
         </div>
 
         {/* Search */}
@@ -120,13 +115,6 @@ const Navbar = ({ onLoginClick }) => {
           </div>
         </div>
       </nav>
-
-      {showLocationModal && (
-        <LocationModal
-          onClose={() => setShowLocationModal(false)}
-          onSave={(newAddress) => setAddress(newAddress)}
-        />
-      )}
     </>
   );
 };
