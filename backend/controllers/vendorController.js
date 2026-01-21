@@ -5,7 +5,7 @@ export const createVendor = async (req, res) => {
   try {
     const { storeName, ownerName, email, phone, password, addressString, city, latitude, longitude, documents } = req.body;
 
-    if (!storeName || !ownerName || !email || !phone || !password || !addressString || !city) {
+    if (!storeName || !ownerName || !email || !phone || !password || !addressString /* || !city */) {
       return res.status(400).json({ message: "All required fields must be provided" });
     }
 
