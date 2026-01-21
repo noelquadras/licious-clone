@@ -13,7 +13,7 @@ import Register from "./components/Register/Register";
 import AdminDashboard from "./components/AdminDashboard/AdminDashboard";
 import ItemPage from "./components/ItemPage/ItemPage";
 import LoginSidebar from "./components/Login/LoginSidebar";
-import InventoryList from "./components/Inventory/InventoryList";
+import Products from "./components/Inventory/Products";
 import CreateProduct from "./components/CreateProduct/CreateProduct";
 import AddFromCatalog from "./components/CreateProduct/AddFromCatalog";
 import AdminOrders from "./components/AdminOrders/AdminOrders";
@@ -63,15 +63,6 @@ function App() {
             />
 
             <Route
-              path="/inventory"
-              element={
-                <AdminProtectedRoute>
-                  <InventoryList />
-                </AdminProtectedRoute>
-              }
-            />
-
-            <Route
               path="/create-product"
               element={
                 <AdminProtectedRoute>
@@ -116,6 +107,9 @@ function App() {
             <Route path="/product/:id" element={<ItemPage />} />
 
             <Route path="/users/:id" element={<UserProfile />} />
+
+            <Route path="/products" element={<Products />} />
+            <Route path="/products/:id" element={<ItemPage />} />
 
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
