@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import ProductCard from "../Product/ProductCard";
 import OrderCard from "../Orders/OrderCard";
@@ -7,6 +7,7 @@ import styles from "./VendorDashboard.module.css";
 
 const VendorDashboard = () => {
   const token = localStorage.getItem("token");
+  const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
@@ -23,7 +24,7 @@ const VendorDashboard = () => {
     } catch (error) {
       console.log(
         "Error fetchMyProducts:",
-        error.response?.data || error.message
+        error.response?.data || error.message,
       );
     }
   };
@@ -59,7 +60,9 @@ const VendorDashboard = () => {
     const outOfStock = items.filter((p) => Number(p.stock) === 0).length;
 
     const totalOrders = orders.length;
-    const deliveredOrders = orders.filter((o) => o.status === "delivered").length;
+    const deliveredOrders = orders.filter(
+      (o) => o.status === "delivered",
+    ).length;
     const pendingOrders = totalOrders - deliveredOrders;
 
     const revenue = orders
@@ -114,7 +117,7 @@ const VendorDashboard = () => {
           <h2 className={styles.statValue}>₹{stats.revenue}</h2>
         </div>
 
-        <div className={styles.statCard}>
+        <div className={styles.statCard} onClick={() => navigate("/orders")}>
           <p className={styles.statLabel}>Total Orders</p>
           <h2 className={styles.statValue}>{stats.totalOrders}</h2>
           <p className={styles.statSub}>
@@ -122,7 +125,7 @@ const VendorDashboard = () => {
           </p>
         </div>
 
-        <div className={styles.statCard}>
+        <div className={styles.statCard} onClick={() => navigate("/inventory")}>
           <p className={styles.statLabel}>Products</p>
           <h2 className={styles.statValue}>{stats.totalProducts}</h2>
           <p className={styles.statSub}>
