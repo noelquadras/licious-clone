@@ -12,7 +12,9 @@ export const registerUser = async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ message: "Email and password are required" });
+      return res
+        .status(400)
+        .json({ message: "Email and password are required" });
     }
 
     const existingUser = await User.findOne({ email });
@@ -36,7 +38,7 @@ export const registerUser = async (req, res) => {
     const token = jwt.sign(
       { id: user._id, userType: "user" },
       process.env.JWT_SECRET,
-      { expiresIn: "100d" }
+      { expiresIn: "100d" },
     );
 
     res.status(201).json({
@@ -75,7 +77,7 @@ export const loginUser = async (req, res) => {
     const token = jwt.sign(
       { id: user._id, userType: "user" },
       process.env.JWT_SECRET,
-      { expiresIn: "100d" }
+      { expiresIn: "100d" },
     );
 
     res.json({
@@ -103,26 +105,48 @@ export const registerVendor = async (req, res) => {
       email,
       password,
       phone,
-      address,
+      addressString,
       latitude,
       longitude,
       documents,
     } = req.body;
 
-    if (!storeName || !ownerName || !email || !password || !phone || !address) {
-      return res.status(400).json({ message: "All required fields must be provided" });
+    if (
+      !storeName ||
+      !ownerName ||
+      !email ||
+      !password ||
+      !phone ||
+      !addressString
+    ) {
+      return res
+        .status(400)
+        .json({ message: "All required fields must be provided" });
     }
 
     const existingVendor = await Vendor.findOne({ email });
     if (existingVendor) {
-      return res.status(400).json({ message: "Vendor already registered with this email" });
+      return res
+        .status(400)
+        .json({ message: "Vendor already registered with this email" });
     }
 
     // Set location if provided
-    const location = (latitude && longitude) ? {
-      type: "Point",
-      coordinates: [parseFloat(longitude), parseFloat(latitude)]
-    } : undefined;
+    const location =
+      latitude && longitude
+        ? {
+            type: "Point",
+            coordinates: [parseFloat(longitude), parseFloat(latitude)],
+          }
+        : undefined;
+
+    const address =
+      location && addressString
+        ? {
+            addressString: addressString,
+            location: location,
+          }
+        : undefined;
 
     const vendor = await Vendor.create({
       storeName,
@@ -131,7 +155,6 @@ export const registerVendor = async (req, res) => {
       password,
       phone,
       address,
-      location,
       documents,
       status: "pending",
     });
@@ -179,7 +202,7 @@ export const loginVendor = async (req, res) => {
     const token = jwt.sign(
       { id: vendor._id, userType: "vendor" },
       process.env.JWT_SECRET,
-      { expiresIn: "100d" }
+      { expiresIn: "100d" },
     );
 
     res.json({
@@ -213,20 +236,36 @@ export const registerDeliveryPartner = async (req, res) => {
       longitude,
     } = req.body;
 
-    if (!firstName || !email || !password || !phone || !vehicleType || !vehicleNumber) {
-      return res.status(400).json({ message: "All required fields must be provided" });
+    if (
+      !firstName ||
+      !email ||
+      !password ||
+      !phone ||
+      !vehicleType ||
+      !vehicleNumber
+    ) {
+      return res
+        .status(400)
+        .json({ message: "All required fields must be provided" });
     }
 
     const existingPartner = await DeliveryPartner.findOne({ email });
     if (existingPartner) {
-      return res.status(400).json({ message: "Delivery partner already registered with this email" });
+      return res
+        .status(400)
+        .json({
+          message: "Delivery partner already registered with this email",
+        });
     }
 
     // Set location if provided
-    const location = (latitude && longitude) ? {
-      type: "Point",
-      coordinates: [parseFloat(longitude), parseFloat(latitude)]
-    } : undefined;
+    const location =
+      latitude && longitude
+        ? {
+            type: "Point",
+            coordinates: [parseFloat(longitude), parseFloat(latitude)],
+          }
+        : undefined;
 
     const deliveryPartner = await DeliveryPartner.create({
       firstName,
@@ -242,7 +281,8 @@ export const registerDeliveryPartner = async (req, res) => {
     });
 
     res.status(201).json({
-      message: "Delivery partner registration submitted. Waiting for admin approval.",
+      message:
+        "Delivery partner registration submitted. Waiting for admin approval.",
       deliveryPartner: {
         id: deliveryPartner._id,
         firstName: deliveryPartner.firstName,
@@ -286,7 +326,7 @@ export const loginDeliveryPartner = async (req, res) => {
     const token = jwt.sign(
       { id: deliveryPartner._id, userType: "delivery" },
       process.env.JWT_SECRET,
-      { expiresIn: "100d" }
+      { expiresIn: "100d" },
     );
 
     res.json({
@@ -314,12 +354,16 @@ export const registerAdmin = async (req, res) => {
     const { firstName, lastName, email, password, phone } = req.body;
 
     if (!firstName || !email || !password) {
-      return res.status(400).json({ message: "First Name, email, and password are required" });
+      return res
+        .status(400)
+        .json({ message: "First Name, email, and password are required" });
     }
 
     const existingAdmin = await Admin.findOne({ email });
     if (existingAdmin) {
-      return res.status(400).json({ message: "Admin already exists with this email" });
+      return res
+        .status(400)
+        .json({ message: "Admin already exists with this email" });
     }
 
     const admin = await Admin.create({
@@ -333,7 +377,7 @@ export const registerAdmin = async (req, res) => {
     const token = jwt.sign(
       { id: admin._id, userType: "admin" },
       process.env.JWT_SECRET,
-      { expiresIn: "100d" }
+      { expiresIn: "100d" },
     );
 
     res.status(201).json({
@@ -373,7 +417,7 @@ export const loginAdmin = async (req, res) => {
     const token = jwt.sign(
       { id: admin._id, userType: "admin" },
       process.env.JWT_SECRET,
-      { expiresIn: "100d" }
+      { expiresIn: "100d" },
     );
 
     res.json({
@@ -390,4 +434,3 @@ export const loginAdmin = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
