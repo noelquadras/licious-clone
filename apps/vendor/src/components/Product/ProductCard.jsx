@@ -1,120 +1,89 @@
-import { Link } from "react-router-dom";
-import axios from "axios";
-import { toast } from "react-toastify";
+import { Link, useNavigate } from "react-router-dom";
+import { Pencil, AlertTriangle, CheckCircle2 } from "lucide-react";
 import styles from "./ProductCard.module.css";
-import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
 
 const ProductCard = ({ product }) => {
-  const token = localStorage.getItem("token");
   const navigate = useNavigate();
-  const [updating, setUpdating] = useState(false);
 
-  const addToCart = async (vendorProductId) => {
-    try {
-      setUpdating(true);
+  const image = product?.images?.[0] || product?.image || "";
 
-      if (!token) {
-        toast.info("Please login to add items to your Cart!", {
-          position: "top-center",
-        });
-        navigate("/");
-        return;
-      }
+  const price = product?.price ?? product?.basePrice ?? "";
+  const stock = Number(product?.stock ?? 0);
+  const status = String(product?.status || "inactive").toLowerCase();
 
-      await axios.post(
-        "/api/cart/add",
-        {
-          vendorProductId,
-          quantity: 1,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+  const isOut = stock === 0;
+  const isLow = stock > 0 && stock <= 5;
 
-      toast.info("Item added to cart!", {
-        position: "top-center",
-        closeOnClick: true,
-      });
+  const badgeText = isOut
+    ? "Out of Stock"
+    : isLow
+      ? `Low Stock • ${stock}`
+      : `Stock • ${stock}`;
 
-      window.dispatchEvent(new Event("cartUpdated"));
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to add item");
-    } finally {
-      setUpdating(false);
-    }
-  };
-
-  const removeFromCart = async (vendorProductId) => {
-    try {
-      setUpdating(true);
-
-      if (!token) {
-        toast.error("Please login to remove items from your Cart!", {
-          position: "top-center",
-        });
-        navigate("/");
-        return;
-      }
-
-      await axios.post(
-        "/api/cart/remove",
-        {
-          vendorProductId,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      toast.info("Item removed from cart!", {
-        position: "top-center",
-        closeOnClick: true,
-      });
-
-      window.dispatchEvent(new Event("cartUpdated"));
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to add item");
-    } finally {
-      setUpdating(false);
-    }
-  };
+  const badgeTone = isOut ? "danger" : isLow ? "warn" : "good";
 
   return (
     <div className={styles.card}>
-        <div className={styles.imageWrapper}>
-          <Link
-            to={`/product/${product._id}`}
-            style={{ textDecoration: "none", color: "inherit" }}
-          >
-          {product.images?.[0] && (
-            <img
-              src={product.images[0]}
-              alt={product.name}
-              className={styles.image}
-            />
+      {/* Image */}
+      <div className={styles.imageWrapper}>
+        <Link
+          to={`/product/${product._id}`}
+          className={styles.imageLink}
+          title="Open product"
+        >
+          {image ? (
+            <img src={image} alt={product?.name} className={styles.image} />
+          ) : (
+            <div className={styles.fallback}>
+              {(product?.name?.[0] || "P").toUpperCase()}
+            </div>
           )}
-            </Link>
-          {/* <div className={styles.quantityBtn}>
-            <QuantityButton
-              qty={quantity}
-              loading={updating}
-              onAdd={(qty) => addToCart(product._id)}
-              onRemove={(qty) => removeFromCart(product._id)}
-            />
-          </div> */}
+        </Link>
+
+        {/* Stock Badge */}
+        <div className={`${styles.badge} ${styles[`badge_${badgeTone}`]}`}>
+          {badgeText}
         </div>
 
+        {/* Status pill */}
+        <div
+          className={`${styles.statusPill} ${
+            status === "active" ? styles.active : styles.inactive
+          }`}
+        >
+          {status === "active" ? (
+            <>
+              <CheckCircle2 size={14} /> Active
+            </>
+          ) : (
+            <>
+              <AlertTriangle size={14} /> Inactive
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* Content */}
       <div className={styles.content}>
-        <h3 className={styles.name}>{product.name}</h3>
-        <p className={styles.description}>{product.description}</p>
-        <div className={styles.price}>
-          ₹{product.price || product.basePrice || "N/A"}
+        <p className={styles.name}>{product?.name || "Unnamed Product"}</p>
+        <p className={styles.description}>
+          {product?.description || "No description available."}
+        </p>
+
+        <div className={styles.bottomRow}>
+          <div className={styles.priceBlock}>
+            <p className={styles.priceLabel}>Price</p>
+            <p className={styles.priceValue}>{price ? `₹${price}` : "—"}</p>
+          </div>
+
+          <button
+            className={styles.editBtn}
+            onClick={() => navigate(`/inventory`)}
+            title="Go to inventory to edit"
+          >
+            <Pencil size={16} />
+            Edit
+          </button>
         </div>
       </div>
     </div>
