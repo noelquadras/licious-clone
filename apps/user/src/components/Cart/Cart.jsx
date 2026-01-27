@@ -40,8 +40,6 @@ const Cart = ({ isSidebar = false }) => {
 
   return (
     <div className={isSidebar ? styles.sidebarContainer : styles.container}>
-      <h1>My Cart</h1>
-
       {cart.items.map((item) => (
         <div key={item.vendorProduct._id} className={styles.cartItem}>
           <div className={styles.itemInfo}>
@@ -69,12 +67,13 @@ const Cart = ({ isSidebar = false }) => {
       ))}
 
       <hr className={styles.divider} />
+      <div className={styles.checkout}>
+        <h2>Total: ₹{totalAmount}</h2>
 
-      <h2>Total: ₹{totalAmount}</h2>
-
-      <button onClick={handleCheckout} className={styles.checkoutBtn}>
-        Proceed to Checkout
-      </button>
+        <button onClick={handleCheckout} className={styles.checkoutBtn}>
+          Proceed to Checkout
+        </button>
+      </div>
     </div>
   );
 };
