@@ -13,7 +13,7 @@ const Home = () => {
   const navigate = useNavigate();
   const { cart } = useCart();
 
-  const { user } = useUser();
+  const { user, fetchUser } = useUser();
   const fname = user?.firstName;
 
   const [items, setItems] = useState([]);
@@ -21,6 +21,10 @@ const Home = () => {
   const gridRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
+
+  useEffect(() => {
+    fetchUser();
+  }, [localStorage.token]);
 
   const updateScrollButtons = () => {
     const el = gridRef.current;
