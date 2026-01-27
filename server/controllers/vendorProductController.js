@@ -410,6 +410,10 @@ export { uploadVendorProductImages };
 
 
 
+
+
+
+
 // // Get all vendor products (public - for browsing)
 // export const getAllVendorProducts = async (req, res) => {
 //   try {
