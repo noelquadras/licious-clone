@@ -2,20 +2,18 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import axios from "axios";
 import styles from "./ItemPage.module.css";
-import { toast } from "react-toastify";
 import QuantityButton from "../Product/QuantityButton";
 import { getProductQuantity } from "../../utils/cartUtils";
+import { useCart } from "../../context/CartContext";
 
 const ItemPage = () => {
-  const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const { id: productId } = useParams();
 
   const [productDetails, setProductDetails] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const [cart, setCart] = useState();
-  const [updating, setUpdating] = useState(false);
+  const { cart, addToCart, removeFromCart } = useCart();
 
   // UI State
   const [activeImage, setActiveImage] = useState(0);
@@ -47,79 +45,6 @@ const ItemPage = () => {
 
     return { discountedPrice, basePrice, discountPercent };
   }, [productDetails]);
-
-  const addToCart = async (vendorProductId) => {
-    try {
-      setUpdating(true);
-
-      if (!token) {
-        toast.info("Please login to add items to your Cart!", {
-          position: "top-center",
-        });
-        navigate("/");
-        return;
-      }
-
-      const res = await axios.post(
-        "/api/cart/add",
-        { vendorProductId, quantity: 1 },
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-
-      setCart(res.data.cart);
-      toast.info("Item added to cart!", { position: "top-center" });
-      window.dispatchEvent(new Event("cartUpdated"));
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to add item");
-    } finally {
-      setUpdating(false);
-    }
-  };
-
-  const removeOneFromCart = async (vendorProductId) => {
-    try {
-      setUpdating(true);
-
-      if (!token) {
-        toast.error("Please login to remove items from your Cart!", {
-          position: "top-center",
-        });
-        navigate("/");
-        return;
-      }
-
-      const res = await axios.post(
-        "/api/cart/remove",
-        { vendorProductId },
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-
-      setCart(res.data.cart);
-      toast.info("Item removed from cart!", { position: "top-center" });
-      window.dispatchEvent(new Event("cartUpdated"));
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to remove item");
-    } finally {
-      setUpdating(false);
-    }
-  };
-
-  const fetchCart = async () => {
-    try {
-      if (!token) return;
-      const res = await axios.get("/api/cart", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setCart(res.data.cart);
-    } catch (error) {
-      console.error("Fetch cart error:", error.response?.data || error.message);
-    }
-  };
-
-  useEffect(() => {
-    fetchCart();
-    // eslint-disable-next-line
-  }, []);
 
   useEffect(() => {
     const fetchProductDetails = async () => {
@@ -181,7 +106,14 @@ const ItemPage = () => {
             Home
           </Link>
           <span className={styles.bcrumbSep}>/</span>
-          <span className={styles.bcrumbLink}>Today&apos;s Deals</span>
+          <span className={styles.bcrumbLink}>
+            <Link
+              to={`/categories?category=${encodeURIComponent(productDetails?.category)}`}
+              className={styles.bcrumbLink}
+            >
+              {productDetails?.category}
+            </Link>
+          </span>
           <span className={styles.bcrumbSep}>/</span>
           <span className={styles.bcrumbCurrent}>{productDetails?.name}</span>
         </div>
@@ -312,9 +244,8 @@ const ItemPage = () => {
                 <div className={styles.ctaRight}>
                   <QuantityButton
                     qty={qty}
-                    loading={updating}
                     onAdd={() => addToCart(productDetails._id)}
-                    onRemove={() => removeOneFromCart(productDetails._id)}
+                    onRemove={() => removeFromCart(productDetails._id)}
                   />
                 </div>
               </div>
