@@ -1,3 +1,5 @@
+// unused code
+
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import Vendor from "./models/vendorModel.js";
