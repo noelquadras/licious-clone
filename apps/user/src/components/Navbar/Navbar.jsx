@@ -60,106 +60,110 @@ const Navbar = ({ onCartClick, onLoginClick }) => {
   return (
     <>
       <nav className={styles.navContainer}>
-        {/* Logo & Location */}
-        <div className={styles.logoSection}>
-          <Link to="/" className={styles.logo}>
-            Licious Clone
-          </Link>
-          <button
-            onClick={() => setShowLocationModal(true)}
-            className={styles.locationBtn}
-          >
-            <MapPin size={40} />
-            <div>
-              <div className={styles.label}>{addressLabel}</div>
-              <div className={styles.addressTxt}>{addressText}</div>
-            </div>
-          </button>
-        </div>
+        <div className={styles.navInner}>
+          <div className={styles.logoSection}>
+            <Link to="/" className={styles.logo}>
+              Licious Clone
+            </Link>
 
-        {/* Search */}
-        <div>
-          <input
-            type="text"
-            placeholder="Search for meat, seafood..."
-            className={styles.searchBar}
-          />
-        </div>
-
-        {/* Navigation Links */}
-        <div className={styles.navLinks}>
-          <Link to="/categories" className={styles.link}>
-            <Layers /> Categories
-          </Link>
-          <Link to="/stores" className={styles.link}>
-            <Store /> Stores
-          </Link>
-
-          <div className={styles.profileWrapper}>
-            {isLoggedin ? (
-              <>
-                <Link
-                  className={styles.link}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowProfileMenu(!showProfileMenu);
-                  }}
-                >
-                  <div className={styles.avatar}>
-                    {profileImage ? (
-                      <img
-                        src={`http://localhost:5000${profileImage}`}
-                        alt="pfp"
-                        className={styles.avatarImg}
-                      />
-                    ) : (
-                      <User />
-                    )}{" "}
-                  </div>
-                  Profile
-                </Link>
-
-                {showProfileMenu && (
-                  <div
-                    className={styles.dropdown}
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <Link
-                      to="/profile"
-                      className={styles.dropdownItem}
-                      onClick={() => setShowProfileMenu(false)}
-                    >
-                      My Profile
-                    </Link>
-                    <Link
-                      to="/profile"
-                      className={styles.dropdownItem}
-                      onClick={() => setShowProfileMenu(false)}
-                    >
-                      Orders
-                    </Link>
-                    <button onClick={handleLogout} className={styles.logoutBtn}>
-                      Logout
-                    </button>
-                  </div>
-                )}
-              </>
-            ) : (
-              <Link onClick={onLoginClick} className={styles.link}>
-                <User /> Login
-              </Link>
-            )}
+            <button
+              onClick={() => setShowLocationModal(true)}
+              className={styles.locationBtn}
+            >
+              <MapPin size={22} className={styles.locationIcon} />
+              <div>
+                <div className={styles.label}>{addressLabel}</div>
+                <div className={styles.addressTxt}>{addressText}</div>
+              </div>
+            </button>
           </div>
 
-          <Link
-            onClick={onCartClick}
-            className={`${styles.link} ${styles.cartLink}`}
-          >
-            <ShoppingCart />
-            {items.length > 0
-              ? `${totalQuantity} Items ₹${totalAmount}`
-              : "Cart"}
-          </Link>
+          <div className={styles.searchWrap}>
+            <input
+              type="text"
+              placeholder="Search for meat, seafood..."
+              className={styles.searchBar}
+            />
+          </div>
+
+          <div className={styles.navLinks}>
+            <Link to="/categories" className={styles.link}>
+              <Layers size={18} /> Categories
+            </Link>
+
+            <Link to="/stores" className={styles.link}>
+              <Store size={18} /> Stores
+            </Link>
+
+            <div className={styles.profileWrapper}>
+              {isLoggedin ? (
+                <>
+                  <Link
+                    className={`${styles.link} ${styles.profileBtn}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowProfileMenu(!showProfileMenu);
+                    }}
+                  >
+                    <div className={styles.avatar}>
+                      {profileImage ? (
+                        <img
+                          src={`http://localhost:5000${profileImage}`}
+                          alt="pfp"
+                          className={styles.avatarImg}
+                        />
+                      ) : (
+                        <User size={18} />
+                      )}
+                    </div>
+                    Profile
+                  </Link>
+
+                  {showProfileMenu && (
+                    <div
+                      className={styles.dropdown}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <Link
+                        to="/profile"
+                        className={styles.dropdownItem}
+                        onClick={() => setShowProfileMenu(false)}
+                      >
+                        My Profile
+                      </Link>
+                      <Link
+                        to="/profile"
+                        className={styles.dropdownItem}
+                        onClick={() => setShowProfileMenu(false)}
+                      >
+                        Orders
+                      </Link>
+                      <button
+                        onClick={handleLogout}
+                        className={styles.logoutBtn}
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <Link onClick={onLoginClick} className={styles.link}>
+                  <User size={18} /> Login
+                </Link>
+              )}
+            </div>
+
+            <Link
+              onClick={onCartClick}
+              className={`${styles.link} ${styles.cartLink}`}
+            >
+              <ShoppingCart size={18} />
+              {items.length > 0
+                ? `${totalQuantity} Items ₹${totalAmount}`
+                : "Cart"}
+            </Link>
+          </div>
         </div>
       </nav>
 
