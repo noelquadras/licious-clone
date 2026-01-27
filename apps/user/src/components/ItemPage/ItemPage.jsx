@@ -89,13 +89,6 @@ const ItemPage = () => {
         </button>
 
         <div className={styles.navTitle}></div>
-
-        <button
-          className={styles.navIconBtn}
-          onClick={() => navigate("/search")}
-        >
-          <span className={styles.searchIcon}>⌕</span>
-        </button>
       </nav>
 
       {/* Page Body */}

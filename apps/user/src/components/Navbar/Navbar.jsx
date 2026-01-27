@@ -5,6 +5,7 @@ import styles from "./Navbar.module.css";
 import { Store, Layers, MapPin, ShoppingCart, User } from "lucide-react";
 import { useCart } from "../../context/CartContext";
 import { useUser } from "../../context/UserContext";
+import SearchModal from "../Search/SearchModal";
 
 const Navbar = ({ onCartClick, onLoginClick }) => {
   const { cart, setCart, fetchCart } = useCart();
@@ -19,6 +20,8 @@ const Navbar = ({ onCartClick, onLoginClick }) => {
   const isLoggedin = Boolean(localStorage.getItem("token"));
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const items = cart?.items ?? [];
 
@@ -83,8 +86,21 @@ const Navbar = ({ onCartClick, onLoginClick }) => {
               type="text"
               placeholder="Search for meat, seafood..."
               className={styles.searchBar}
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setIsSearchModalOpen(true);
+              }}
+              onFocus={() => setIsSearchModalOpen(true)}
             />
           </div>
+
+          {isSearchModalOpen && (
+            <SearchModal
+              query={searchQuery}
+              onClose={() => setIsSearchModalOpen(false)}
+            />
+          )}
 
           <div className={styles.navLinks}>
             <Link to="/categories" className={styles.link}>
