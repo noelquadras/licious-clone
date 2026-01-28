@@ -1,17 +1,5 @@
 .page {
   min-height: 100vh;
-  background:
-    radial-gradient(
-      circle at 10% 10%,
-      rgba(217, 38, 98, 0.09),
-      transparent 45%
-    ),
-    radial-gradient(
-      circle at 90% 20%,
-      rgba(88, 101, 242, 0.09),
-      transparent 45%
-    ),
-    #0b0f19;
   padding: 34px 16px;
 }
 
@@ -39,13 +27,13 @@
   margin: 0;
   font-size: 28px;
   font-weight: 900;
-  color: #fff;
+  color: #1a1a1a;
 }
 
 .subtitle {
   margin: 6px 0 0 0;
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.66);
+  color: rgba(26, 26, 26, 0.66);
 }
 
 .topActions {
@@ -56,9 +44,9 @@
 }
 
 .backBtn {
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.06);
-  color: #fff;
+  border: 1px solid rgba(26, 26, 26, 0.14);
+  background: rgba(26, 26, 26, 0.06);
+  color: #1a1a1a;
   padding: 10px 14px;
   border-radius: 12px;
   font-weight: 900;
@@ -74,8 +62,8 @@
 
 .backBtn:hover {
   transform: translateY(-1px);
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(26, 26, 26, 0.08);
+  border-color: rgba(26, 26, 26, 0.22);
 }
 
 .primaryBtn {
@@ -101,9 +89,9 @@
 }
 
 .secondaryBtn {
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.06);
-  color: #fff;
+  border: 1px solid rgba(26, 26, 26, 0.14);
+  background: rgba(26, 26, 26, 0.06);
+  color: #1a1a1a;
   padding: 10px 14px;
   border-radius: 12px;
   font-weight: 900;
@@ -119,17 +107,17 @@
 
 .secondaryBtn:hover {
   transform: translateY(-1px);
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(26, 26, 26, 0.08);
+  border-color: rgba(26, 26, 26, 0.22);
 }
 
 /* Header Profile */
 .profileHeader {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(26, 26, 26, 0.09);
   border-radius: 18px;
   padding: 16px;
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(12px);
   display: flex;
   align-items: center;
@@ -165,13 +153,13 @@
   margin: 0;
   font-size: 18px;
   font-weight: 900;
-  color: #fff;
+  color: #1a1a1a;
 }
 
 .email {
   margin: 0;
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(26, 26, 26, 0.7);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -193,7 +181,7 @@
   border-radius: 999px;
   font-size: 12px;
   font-weight: 900;
-  color: rgba(255, 255, 255, 0.88);
+  color: rgba(26, 26, 26, 0.88);
   background: rgba(34, 197, 94, 0.14);
   border: 1px solid rgba(34, 197, 94, 0.24);
 }
@@ -206,9 +194,9 @@
   border-radius: 999px;
   font-size: 12px;
   font-weight: 900;
-  color: rgba(255, 255, 255, 0.78);
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(26, 26, 26, 0.78);
+  background: rgba(26, 26, 26, 0.06);
+  border: 1px solid rgba(26, 26, 26, 0.12);
 }
 
 .mono {
@@ -227,11 +215,11 @@
 
 .card {
   grid-column: span 4;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(26, 26, 26, 0.09);
   border-radius: 18px;
   padding: 16px;
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(12px);
 }
 
@@ -243,7 +231,7 @@
 
 .cardTitle {
   margin: 0;
-  color: rgba(255, 255, 255, 0.92);
+  color: rgba(26, 26, 26, 0.92);
   font-weight: 900;
   font-size: 14px;
 }
@@ -262,9 +250,9 @@
   border-radius: 14px;
   display: grid;
   place-items: center;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #fff;
+  background: rgba(26, 26, 26, 0.08);
+  border: 1px solid rgba(26, 26, 26, 0.12);
+  color: #1a1a1a;
   flex-shrink: 0;
 }
 
@@ -278,13 +266,13 @@
 .infoLabel {
   margin: 0;
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.65);
+  color: rgba(26, 26, 26, 0.65);
 }
 
 .infoValue {
   margin: 0;
   font-weight: 900;
-  color: rgba(255, 255, 255, 0.92);
+  color: rgba(26, 26, 26, 0.92);
   font-size: 13px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -302,14 +290,14 @@
 .kpi {
   padding: 12px;
   border-radius: 16px;
-  background: rgba(0, 0, 0, 0.22);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(26, 26, 26, 0.05);
+  border: 1px solid rgba(26, 26, 26, 0.1);
 }
 
 .kpiLabel {
   margin: 0;
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.65);
+  color: rgba(26, 26, 26, 0.65);
   font-weight: 800;
 }
 
@@ -317,7 +305,7 @@
   margin: 8px 0 0 0;
   font-weight: 900;
   font-size: 14px;
-  color: #fff;
+  color: #1a1a1a;
 }
 
 /* Note */
@@ -332,26 +320,26 @@
 .noteTitle {
   margin: 0;
   font-weight: 900;
-  color: #fff;
+  color: #1a1a1a;
   font-size: 13px;
 }
 
 .noteText {
   margin: 8px 0 0 0;
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(26, 26, 26, 0.75);
   line-height: 1.55;
 }
 
 /* Empty + Error + Skeleton */
 .emptyBox,
 .errorBox {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.9);
   border-radius: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(26, 26, 26, 0.09);
   padding: 18px;
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
-  color: #fff;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.1);
+  color: #1a1a1a;
   backdrop-filter: blur(12px);
 }
 
@@ -364,7 +352,7 @@
 .emptyText {
   margin: 10px 0 0 0;
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(26, 26, 26, 0.72);
 }
 
 .errorTitle {
@@ -376,7 +364,7 @@
 .errorText {
   margin: 10px 0 0 0;
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(26, 26, 26, 0.72);
   line-height: 1.6;
 }
 
@@ -389,10 +377,10 @@
 
 .skeletonHeader,
 .skeletonMain {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(26, 26, 26, 0.06);
+  border: 1px solid rgba(26, 26, 26, 0.08);
   border-radius: 18px;
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.1);
 }
 
 .skeletonHeader {

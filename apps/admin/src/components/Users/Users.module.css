@@ -1,17 +1,7 @@
 .page {
   min-height: 100vh;
-  background:
-    radial-gradient(
-      circle at 10% 10%,
-      rgba(217, 38, 98, 0.09),
-      transparent 45%
-    ),
-    radial-gradient(
-      circle at 90% 20%,
-      rgba(88, 101, 242, 0.09),
-      transparent 45%
-    ),
-    #0b0f19;
+  max-width: 1080px;
+  margin: 0 auto;
   padding: 34px 16px;
 }
 
@@ -44,20 +34,20 @@
   margin: 0;
   font-size: 28px;
   font-weight: 900;
-  color: #fff;
+  color: #1a1a1a;
   letter-spacing: 0.3px;
 }
 
 .subTitle {
   margin: 6px 0 0 0;
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.66);
+  color: rgba(26, 26, 26, 0.66);
 }
 
 .backBtn {
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.06);
-  color: #fff;
+  border: 1px solid rgba(26, 26, 26, 0.14);
+  background: rgba(26, 26, 26, 0.06);
+  color: #1a1a1a;
   padding: 10px 14px;
   border-radius: 12px;
   font-weight: 800;
@@ -70,8 +60,8 @@
 
 .backBtn:hover {
   transform: translateY(-1px);
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(26, 26, 26, 0.08);
+  border-color: rgba(26, 26, 26, 0.22);
 }
 
 .primaryBtn {
@@ -107,15 +97,15 @@
 
 .statCard {
   grid-column: span 4;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(26, 26, 26, 0.09);
   border-radius: 18px;
   padding: 14px;
   display: flex;
   align-items: center;
   gap: 12px;
   backdrop-filter: blur(12px);
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.1);
 }
 
 @media (max-width: 900px) {
@@ -130,9 +120,9 @@
   border-radius: 16px;
   display: grid;
   place-items: center;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #fff;
+  background: rgba(26, 26, 26, 0.08);
+  border: 1px solid rgba(26, 26, 26, 0.12);
+  color: #1a1a1a;
 }
 
 .statText {
@@ -144,14 +134,14 @@
 .statLabel {
   margin: 0;
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.65);
+  color: rgba(26, 26, 26, 0.65);
 }
 
 .statValue {
   margin: 0;
   font-size: 16px;
   font-weight: 900;
-  color: #fff;
+  color: #1a1a1a;
 }
 
 /* Controls */
@@ -172,9 +162,9 @@
   gap: 10px;
   padding: 12px 14px;
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(26, 26, 26, 0.1);
+  color: rgba(26, 26, 26, 0.8);
   backdrop-filter: blur(12px);
 }
 
@@ -183,13 +173,13 @@
   border: none;
   outline: none;
   background: transparent;
-  color: #fff;
+  color: #1a1a1a;
   font-weight: 700;
   font-size: 13px;
 }
 
 .searchInput::placeholder {
-  color: rgba(255, 255, 255, 0.45);
+  color: rgba(26, 26, 26, 0.45);
   font-weight: 600;
 }
 
@@ -197,25 +187,25 @@
   min-width: 180px;
   padding: 12px 12px;
   border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.06);
-  color: #fff;
+  border: 1px solid rgba(26, 26, 26, 0.1);
+  background: rgba(255, 255, 255, 0.9);
+  color: #1a1a1a;
   outline: none;
   font-weight: 800;
   cursor: pointer;
 }
 
 .select option {
-  background: #0b0f19;
+  background: #f8f9fa;
 }
 
 /* Table */
 .tableWrap {
   overflow-x: auto;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.9);
   border-radius: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(26, 26, 26, 0.09);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(12px);
 }
 
@@ -228,23 +218,23 @@
   text-align: left;
   padding: 14px 14px;
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.7);
-  background: rgba(255, 255, 255, 0.04);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(26, 26, 26, 0.7);
+  background: rgba(26, 26, 26, 0.04);
+  border-bottom: 1px solid rgba(26, 26, 26, 0.08);
   font-weight: 900;
   letter-spacing: 0.3px;
 }
 
 .table td {
   padding: 14px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-  color: rgba(255, 255, 255, 0.88);
+  border-bottom: 1px solid rgba(26, 26, 26, 0.07);
+  color: rgba(26, 26, 26, 0.88);
   font-size: 13px;
   vertical-align: middle;
 }
 
 .table tr:hover td {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(26, 26, 26, 0.04);
 }
 
 /* user cell */
@@ -281,7 +271,7 @@
 .userName {
   margin: 0;
   font-weight: 900;
-  color: #fff;
+  color: #1a1a1a;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -291,7 +281,7 @@
 .userMeta {
   margin: 0;
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.62);
+  color: rgba(26, 26, 26, 0.62);
 }
 
 .mono {
@@ -311,7 +301,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(26, 26, 26, 0.85);
 }
 
 .contactText {
@@ -328,17 +318,17 @@
   border-radius: 999px;
   font-size: 12px;
   font-weight: 900;
-  color: rgba(255, 255, 255, 0.88);
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(26, 26, 26, 0.88);
+  background: rgba(26, 26, 26, 0.06);
+  border: 1px solid rgba(26, 26, 26, 0.12);
 }
 
 /* copy button */
 .copyBtn {
   width: 100%;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.06);
-  color: #fff;
+  border: 1px solid rgba(26, 26, 26, 0.14);
+  background: rgba(26, 26, 26, 0.06);
+  color: #1a1a1a;
   padding: 10px 12px;
   border-radius: 12px;
   font-weight: 900;
@@ -351,18 +341,18 @@
 
 .copyBtn:hover {
   transform: translateY(-1px);
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(26, 26, 26, 0.08);
+  border-color: rgba(26, 26, 26, 0.22);
 }
 
 /* empty */
 .emptyBox {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(26, 26, 26, 0.09);
   border-radius: 18px;
   padding: 18px;
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
-  color: #fff;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.1);
+  color: #1a1a1a;
   backdrop-filter: blur(12px);
 }
 
@@ -374,7 +364,7 @@
 
 .emptyText {
   margin: 8px 0 0 0;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(26, 26, 26, 0.7);
   font-size: 13px;
 }
 
@@ -382,10 +372,10 @@
 .skeletonHeader,
 .skeletonCard,
 .skeletonTable {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(26, 26, 26, 0.06);
+  border: 1px solid rgba(26, 26, 26, 0.08);
   border-radius: 18px;
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.1);
 }
 
 .skeletonHeader {
@@ -404,12 +394,12 @@
 
 /* error */
 .errorBox {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 77, 79, 0.22);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 77, 79, 0.35);
   border-radius: 18px;
   padding: 18px;
-  color: #fff;
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
+  color: #1a1a1a;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.1);
 }
 
 .errorTitle {
@@ -420,7 +410,7 @@
 
 .errorText {
   margin: 10px 0 0 0;
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(26, 26, 26, 0.72);
   font-size: 13px;
   line-height: 1.6;
 }
