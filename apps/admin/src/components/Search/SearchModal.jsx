@@ -5,13 +5,11 @@ import styles from "./SearchModal.module.css";
 
 const SearchModal = ({ query, onClose }) => {
   const token = localStorage.getItem("token");
-  const [products, setProducts] = useState([]);
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!query.trim()) {
-      setProducts([]);
       setResults([]);
       return;
     }
@@ -27,15 +25,12 @@ const SearchModal = ({ query, onClose }) => {
 
         const baseProducts = res.data.baseProducts || [];
 
-        setProducts(baseProducts);
-
         const filtered = baseProducts.filter((p) =>
           p.name.toLowerCase().includes(query.toLowerCase()),
         );
 
         setResults(filtered);
       } catch (err) {
-        setProducts([]);
         setResults([]);
       } finally {
         setLoading(false);
