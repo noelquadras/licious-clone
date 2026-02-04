@@ -113,7 +113,7 @@ const Register = ({ onLoginClick }) => {
         <textarea
           name="address"
           placeholder="Store Address"
-          value={formData.address}
+          value={formData.addressString}
           onChange={handleChange}
           className={`${styles.inputField} ${styles.textArea}`}
           required
