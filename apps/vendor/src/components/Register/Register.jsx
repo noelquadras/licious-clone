@@ -33,7 +33,7 @@ const Register = ({ onLoginClick }) => {
       toast.success("Registration Successful! Please Login.", {
         position: "top-center",
       });
-      navigate("/login");
+      navigate("/pending-approval");
     } catch (error) {
       console.error(
         "Registration Error:",
