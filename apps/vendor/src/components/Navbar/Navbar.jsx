@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import styles from "./Navbar.module.css";
+import SearchModal from "../Search/SearchModal";
 import { Store, Layers, MapPin, User } from "lucide-react";
 
 const Navbar = ({ onLoginClick }) => {
   const [address, setAddress] = useState("");
   const isLoggedin = Boolean(localStorage.getItem("token"));
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,13 +55,26 @@ const Navbar = ({ onLoginClick }) => {
         </div>
 
         {/* Search */}
-        <div>
+        <div className={styles.searchWrap}>
           <input
             type="text"
             placeholder="Search for meat, seafood..."
             className={styles.searchBar}
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setIsSearchModalOpen(true);
+            }}
+            onFocus={() => setIsSearchModalOpen(true)}
           />
         </div>
+
+        {isSearchModalOpen && (
+          <SearchModal
+            query={searchQuery}
+            onClose={() => setIsSearchModalOpen(false)}
+          />
+        )}
 
         {/* Navigation Links */}
         <div className={styles.navLinks}>
