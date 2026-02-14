@@ -3,14 +3,21 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import styles from "./SearchModal.module.css";
 
-const SearchModal = ({ query, onClose }) => {
+const SearchModal = ({ query, onClose, results: externalResults }) => {
   const token = localStorage.getItem("token");
-  const [results, setResults] = useState([]);
+  const [internalResults, setInternalResults] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  // Use external results if provided, otherwise use internal state
+  const results =
+    externalResults !== undefined ? externalResults : internalResults;
+
   useEffect(() => {
+    // If external results are provided, skip internal fetching
+    if (externalResults !== undefined) return;
+
     if (!query.trim()) {
-      setResults([]);
+      setInternalResults([]);
       return;
     }
 
@@ -21,16 +28,16 @@ const SearchModal = ({ query, onClose }) => {
           params: { query: query },
           headers: { Authorization: `Bearer ${token}` },
         });
-        setResults(res.data.vendorProducts || []);
+        setInternalResults(res.data.vendorProducts || []);
       } catch {
-        setResults([]);
+        setInternalResults([]);
       } finally {
         setLoading(false);
       }
     }, 300);
 
     return () => clearTimeout(delay);
-  }, [query]);
+  }, [query, externalResults]);
 
   return (
     <div className={styles.overlay} onClick={onClose}>

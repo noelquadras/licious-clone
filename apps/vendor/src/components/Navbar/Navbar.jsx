@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import styles from "./Navbar.module.css";
@@ -11,6 +11,7 @@ const Navbar = ({ onLoginClick }) => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [items, setItems] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,6 +34,34 @@ const Navbar = ({ onLoginClick }) => {
     window.addEventListener("click", closeMenu);
     return () => window.removeEventListener("click", closeMenu);
   }, []);
+
+  useEffect(() => {
+    if (isLoggedin) {
+      const fetchInventory = async () => {
+        try {
+          const res = await axios.get("/api/products/vendor/inventory", {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
+          setItems(res.data.vendorProducts || []);
+        } catch (err) {
+          console.error(err);
+        }
+      };
+      fetchInventory();
+    }
+  }, [isLoggedin]);
+
+  const filteredItems = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return items;
+
+    return items.filter((item) => {
+      const name = (item?.name || item?.baseProduct?.name || "").toLowerCase();
+      return name.includes(q);
+    });
+  }, [items, searchQuery]);
 
   const handleLogout = () => {
     localStorage.clear();
@@ -73,6 +102,7 @@ const Navbar = ({ onLoginClick }) => {
           <SearchModal
             query={searchQuery}
             onClose={() => setIsSearchModalOpen(false)}
+            results={filteredItems}
           />
         )}
 
